@@ -2,7 +2,7 @@ import Logo from '@/assets/logo.svg';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
-const SidebarLogo = ({ className }: { className?: string }) => {
+const LogoButton = ({ className }: { className?: string }) => {
   return (
     <Link
       href="/"
@@ -15,4 +15,4 @@ const SidebarLogo = ({ className }: { className?: string }) => {
     </Link>
   );
 };
-export default SidebarLogo;
+export default LogoButton;

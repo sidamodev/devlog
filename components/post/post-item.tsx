@@ -19,16 +19,16 @@ const PostItem = ({ post }: { post: PostMockType }) => {
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        {post.date}
+        <span className="text-xs">{post.date}</span>
       </div>
       <div className="flex">
         <div className="flex-1">
-          <h1 className="text-2xl font-bold">{post.title}</h1>
-          <p className="line-clamp-2">{post.description}</p>
+          <h1 className="text-lg sm:text-xl font-bold">{post.title}</h1>
+          <p className="text-sm sm:text-base line-clamp-2">{post.description}</p>
         </div>
         <img src={post.image} alt={post.title} width={150} height={100} className="ml-4 rounded-md object-cover" />
       </div>
-      <div className="mt-4 flex items-center text-ring">
+      <div className="mt-4 flex items-center text-sm text-ring">
         <IoThumbsUpOutline className="inline-block mr-1" />
         <span className="mr-2">10</span>
         <IoChatbubblesOutline className="inline-block mr-1" />

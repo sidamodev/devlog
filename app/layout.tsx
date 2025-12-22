@@ -1,4 +1,4 @@
-import Sidebar from '@/components/sidebar/sidebar';
+import AppNav from '@/components/navigation/app-nav';
 import { ThemeProvider } from '@/components/theme-provider';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -30,7 +30,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="flex min-h-screen">
-            <Sidebar />
+            <AppNav />
             <div className="flex flex-col flex-1">
               <AppHeader />
               <main className="flex flex-col items-center">{children}</main>

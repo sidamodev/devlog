@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import type { IconType } from 'react-icons';
 
-type SidebarButtonProps = {
+type NavButtonProps = {
   defaultIcon: IconType;
   activeIcon: IconType;
   to: string;
@@ -11,13 +11,7 @@ type SidebarButtonProps = {
   active: boolean;
 };
 
-const SidebarButton = ({
-  defaultIcon: DefaultIcon,
-  activeIcon: ActiveIcon,
-  className,
-  to,
-  active,
-}: SidebarButtonProps) => {
+const NavButton = ({ defaultIcon: DefaultIcon, activeIcon: ActiveIcon, className, to, active }: NavButtonProps) => {
   const Icon = active ? ActiveIcon : DefaultIcon;
   return (
     <Button
@@ -36,4 +30,4 @@ const SidebarButton = ({
   );
 };
 
-export default SidebarButton;
+export default NavButton;
