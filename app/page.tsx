@@ -1,10 +1,4 @@
-import { Button } from '@/components/ui/button';
-
 const MainPage = () => {
-  return (
-    <div>
-      <Button variant="secondary">Click Me</Button>
-    </div>
-  );
+  return <div></div>;
 };
 export default MainPage;
