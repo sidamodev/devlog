@@ -3,7 +3,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import GlobalHeader from '@/components/header/global-header';
+import AppHeader from '@/components/header/app-header';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -31,9 +31,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="flex min-h-screen">
             <Sidebar />
-            <div className="flex flex-col flex-1 items-center">
-              <GlobalHeader />
-              <main className="w-full max-w-xl flex flex-col pt-8">{children}</main>
+            <div className="flex flex-col flex-1">
+              <AppHeader />
+              <main className="flex flex-col items-center">{children}</main>
             </div>
           </div>
         </ThemeProvider>

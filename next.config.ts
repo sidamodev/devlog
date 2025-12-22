@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
   /* config options here */
   turbopack: {
     root: path.join(__dirname),
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.ts',
+      },
+    },
   },
 };
 

@@ -1,12 +1,15 @@
-// import Logo from '@/app/icon.svg';
-import Logo from '@/components/sidebar/logo';
+import Logo from '@/assets/logo.svg';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
-const SidebarLogo = () => {
+const SidebarLogo = ({ className }: { className?: string }) => {
   return (
     <Link
       href="/"
-      className="flex justify-center items-center p-0 h-14 w-14 rounded-lg active:scale-100 transition duration-300 text-accent-foreground dark:hover:bg-transparent hover:bg-transparent hover:scale-120"
+      className={cn(
+        'hidden sm:flex justify-center items-center p-0 h-16 rounded-lg active:scale-100 transition duration-300 text-accent-foreground dark:hover:bg-transparent hover:bg-transparent hover:scale-120',
+        className,
+      )}
     >
       <Logo className="size-6" />
     </Link>
