@@ -1,9 +1,9 @@
+import AppHeader from '@/components/header/app-header';
 import AppNav from '@/components/navigation/app-nav';
 import { ThemeProvider } from '@/components/theme-provider';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import AppHeader from '@/components/header/app-header';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-accent/60 dark:bg-background`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="flex min-h-screen">
             <AppNav />
