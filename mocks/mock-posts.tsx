@@ -10,6 +10,7 @@ export const MOCK_POSTS = [
       'Server Actions를 적용하면서 생기는 캐싱/리밸리데이션 포인트와, 클라이언트 폼과 결합할 때의 패턴을 정리했습니다.',
     likes: 128,
     comments: 34,
+    bookmarks: 10
   },
   {
     id: 'post-002',
@@ -22,6 +23,7 @@ export const MOCK_POSTS = [
       '데이터 동기화, 캐시 무효화, mutation 처리 관점에서 어떤 팀/프로덕트에 어떤 선택이 맞는지 비교해봤습니다.',
     likes: 76,
     comments: 19,
+    bookmarks: 5
   },
   {
     id: 'post-003',
@@ -34,6 +36,7 @@ export const MOCK_POSTS = [
       '카드형 리스트에서 제목/본문 길이가 제각각일 때 높이 튐을 줄이는 구성과 유틸 조합을 예제로 공유합니다.',
     likes: 52,
     comments: 11,
+    bookmarks: 13
   },
   {
     id: 'post-004',
@@ -46,6 +49,7 @@ export const MOCK_POSTS = [
       '리스트 + 상세 정보 조합에서 API를 어떻게 설계/호출해야 병목이 안 생기는지, BFF 패턴까지 함께 정리했습니다.',
     likes: 201,
     comments: 58,
+    bookmarks: 16
   },
   {
     id: 'post-005',
@@ -58,5 +62,6 @@ export const MOCK_POSTS = [
       'Fallback 처리, 이미지 로딩 실패 대응, 사이즈 variants 구성 등 Avatar를 프로젝트 스타일에 맞추는 방법을 정리했습니다.',
     likes: 33,
     comments: 7,
+    bookmarks: 1
   },
 ];
