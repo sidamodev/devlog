@@ -1,5 +1,4 @@
 import PostItem from '@/components/post/post-item';
-import { Separator } from '@/components/ui/separator';
 import { getPosts } from '@/lib/post';
 
 const MainPage = async () => {
@@ -10,7 +9,7 @@ const MainPage = async () => {
         {posts.map((post, index) => (
           <li key={post.id}>
             <PostItem post={post} />
-            {index !== posts.length - 1 && <Separator className="my-4" />}
+            {index !== posts.length - 1 && <div className="h-px bg-border/40 my-4" />}
           </li>
         ))}
       </ul>

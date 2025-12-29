@@ -7,7 +7,7 @@ import { BiBell, BiCog, BiHome, BiPencil, BiSolidBell, BiSolidCog, BiSolidHome, 
 const AppNav = () => {
   const segment = useSelectedLayoutSegment();
   return (
-    <nav className="fixed bg-accent flex sm:bg-transparent sm:flex-col bottom-0 items-center sm:h-screen sm:top-0 shrink-0 sm:sticky w-full sm:w-14 sm:pb-20 z-1000 sm:border-r">
+    <nav className="fixed bg-accent flex sm:bg-transparent sm:flex-col bottom-0 items-center sm:h-screen sm:top-0 shrink-0 sm:sticky w-full sm:w-14 sm:pb-20 z-50 sm:border-r">
       <LogoButton />
       <div className="flex sm:flex-col justify-around sm:justify-center sm:items-center flex-1">
         <NavButton active={segment === null} defaultIcon={BiHome} activeIcon={BiSolidHome} to="/" />
