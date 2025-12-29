@@ -19,35 +19,55 @@ type PostType = {
 
 const PostItem = ({ post }: { post: PostType }) => {
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center justify-between text-sm">
-        <div className="flex items-center gap-2">
+    <article className="flex flex-col">
+      <header className="flex items-center justify-between text-sm">
+        <Link
+          href={`/u/${post.author}`}
+          className="flex items-center gap-1 transition hover:bg-accent rounded-md p-1 -m-1"
+        >
           <Avatar className="size-6">
             <AvatarImage src={post.authorImage} alt="글쓴이" />
-            <AvatarFallback>dl</AvatarFallback>
+            <AvatarFallback>{post.author.charAt(0)}</AvatarFallback>
           </Avatar>
-          <span className="font-bold">{post.author}</span>
-        </div>
-        <span className="text-xs text-ring">{post.date}</span>
-      </div>
-      <Link href={`/u/${post.author}/${post.title}`}>
+          <span className="text-xs font-semibold">{post.author}</span>
+        </Link>
+        <time className="text-xs text-muted-foreground">{post.date}</time>
+      </header>
+
+      <Link href={`/u/${post.author}/${post.title}`} className="group" aria-label={`${post.title} 글 보기`}>
         <div className="flex mt-1">
           <div className="flex-1">
-            <h1 className="text-md sm:text-lg font-bold">{post.title}</h1>
-            <p className="text-sm text-ellipsis">{post.description}</p>
+            <h2 className="sm:text-lg font-bold group-hover:underline">{post.title}</h2>
+            <p className="line-clamp-3 text-sm text-muted-foreground">{post.description}</p>
           </div>
-          <Image src={post.image} alt={post.title} width={150} height={100} className="ml-4 rounded-md object-cover" />
-        </div>
-        <div className="mt-2 flex items-center text-xs text-ring">
-          <AiOutlineLike className="size-4 mr-1" />
-          <span className="mr-4">{post.likes}</span>
-          <IoChatbubbleOutline className="size-4 mr-1" />
-          <span className="mr-4">{post.comments}</span>
-          <IoStarOutline className="size-4 mr-1" />
-          <span className="mr-4">{post.bookmarks}</span>
+          <figure className="ml-2 sm:ml-4 relative h-26 w-22 shrink-0 overflow-hidden rounded-sm sm:h-30 sm:w-42 border shadow-lg">
+            <Image
+              src={post.image}
+              alt={post.title}
+              fill
+              sizes="(max-width: 640px) 180px, 126px"
+              className="object-cover transition-opacity group-hover:opacity-80"
+            />
+          </figure>
         </div>
       </Link>
-    </div>
+      <footer className="flex justify-between">
+        <div className="mt-1 flex items-center gap-4 text-xs text-muted-foreground">
+          <button className="flex items-center gap-1 transition hover:bg-accent rounded-lg p-2 -m-2">
+            <AiOutlineLike className="size-4" aria-hidden="true" />
+            <span>{post.likes}</span>
+          </button>
+          <button className="flex items-center gap-1 transition hover:bg-accent rounded-lg p-2 -m-2">
+            <IoStarOutline className="size-4" aria-hidden="true" />
+            <span>{post.bookmarks}</span>
+          </button>
+          <div className="flex items-center gap-1">
+            <IoChatbubbleOutline className="size-4" aria-hidden="true" />
+            <span>{post.comments}</span>
+          </div>
+        </div>
+      </footer>
+    </article>
   );
 };
 export default PostItem;

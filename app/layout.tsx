@@ -31,9 +31,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="flex min-h-screen">
             <AppNav />
-            <div className="flex flex-col flex-1">
+            <div className="flex min-w-0 flex-col flex-1 pb-[calc(3.5rem+env(safe-area-inset-bottom))]">
               <AppHeader />
-              <main className="flex flex-col items-center">{children}</main>
+              <main className="flex w-full flex-col items-center p-4">{children}</main>
             </div>
           </div>
         </ThemeProvider>

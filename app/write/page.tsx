@@ -3,8 +3,8 @@ import { Separator } from '@/components/ui/separator';
 
 const WritePage = () => {
   return (
-    <div className="flex max-w-sm sm:max-w-xl justify-center">
-      <div className="flex w-full flex-col gap-4 pt-8 px-4 max-w-3xl">
+    <div className="flex max-w-sm sm:max-w-2xl justify-center overflow-clip">
+      <div className="flex w-full flex-col gap-4 p-8">
         <section aria-label="제목 입력란">
           <label htmlFor="title" className="sr-only">
             제목
