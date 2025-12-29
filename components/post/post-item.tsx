@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AiOutlineLike } from 'react-icons/ai';
@@ -19,52 +20,63 @@ type PostType = {
 
 const PostItem = ({ post }: { post: PostType }) => {
   return (
-    <article className="flex flex-col">
-      <header className="flex items-center justify-between text-sm">
-        <Link
-          href={`/u/${post.author}`}
-          className="flex items-center gap-1 transition hover:bg-accent rounded-md p-1 -m-1"
-        >
-          <Avatar className="size-6">
-            <AvatarImage src={post.authorImage} alt="글쓴이" />
+    <article className="flex flex-col group">
+      {/* Header: Author & Date */}
+      <header className="flex items-center gap-2 text-sm mb-3">
+        <Link href={`/u/${post.author}`} className="flex items-center gap-2 hover:underline">
+          <Avatar className="size-6 border">
+            <AvatarImage src={post.authorImage} alt={post.author} />
             <AvatarFallback>{post.author.charAt(0)}</AvatarFallback>
           </Avatar>
-          <span className="text-xs font-semibold">{post.author}</span>
+          <span className="font-medium text-foreground">{post.author}</span>
         </Link>
+        <span className="text-muted-foreground">·</span>
         <time className="text-xs text-muted-foreground">{post.date}</time>
       </header>
 
-      <Link href={`/u/${post.author}/${post.title}`} className="group" aria-label={`${post.title} 글 보기`}>
-        <div className="flex mt-1">
-          <div className="flex-1">
-            <h2 className="sm:text-lg font-bold group-hover:underline">{post.title}</h2>
-            <p className="line-clamp-3 text-sm text-muted-foreground">{post.description}</p>
+      {/* Body: Title, Desc, Image */}
+      <Link href={`/u/${post.author}/${post.title}`} className="block" aria-label={`${post.title} 글 보기`}>
+        <div className="flex flex-col sm:flex-row gap-4">
+          {/* Text Content */}
+          <div className="flex-1 order-2 sm:order-1 flex flex-col justify-between">
+            <div>
+              <h2 className="text-lg sm:text-xl font-bold group-hover:underline decoration-2 underline-offset-4 leading-tight">
+                {post.title}
+              </h2>
+              <p className="line-clamp-2 sm:line-clamp-3 text-sm text-muted-foreground mt-2 leading-relaxed">
+                {post.description}
+              </p>
+            </div>
           </div>
-          <figure className="ml-2 sm:ml-4 relative h-26 w-22 shrink-0 overflow-hidden rounded-sm sm:h-30 sm:w-42 border shadow-lg">
+
+          {/* Image */}
+          <figure className="order-1 sm:order-2 relative w-full sm:w-[140px] aspect-video sm:aspect-square shrink-0 overflow-hidden rounded-md border bg-muted">
             <Image
               src={post.image}
               alt={post.title}
               fill
-              sizes="(max-width: 640px) 180px, 126px"
-              className="object-cover transition-opacity group-hover:opacity-80"
+              sizes="(max-width: 640px) 100vw, 140px"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </figure>
         </div>
       </Link>
-      <footer className="flex justify-between">
-        <div className="mt-1 flex items-center gap-4 text-xs text-muted-foreground">
-          <button className="flex items-center gap-1 transition hover:bg-accent rounded-lg p-2 -m-2">
+
+      {/* Footer: Actions */}
+      <footer className="flex items-center justify-between mt-3">
+        <div className="flex items-center gap-0.5 -ml-2">
+          <Button variant="ghost" size="sm" className="h-8 px-2 text-muted-foreground hover:text-foreground gap-1.5">
             <AiOutlineLike className="size-4" aria-hidden="true" />
-            <span>{post.likes}</span>
-          </button>
-          <button className="flex items-center gap-1 transition hover:bg-accent rounded-lg p-2 -m-2">
-            <IoStarOutline className="size-4" aria-hidden="true" />
-            <span>{post.bookmarks}</span>
-          </button>
-          <div className="flex items-center gap-1">
+            <span className="text-xs font-medium">{post.likes}</span>
+          </Button>
+          <Button variant="ghost" size="sm" className="h-8 px-2 text-muted-foreground hover:text-foreground gap-1.5">
             <IoChatbubbleOutline className="size-4" aria-hidden="true" />
-            <span>{post.comments}</span>
-          </div>
+            <span className="text-xs font-medium">{post.comments}</span>
+          </Button>
+          <Button variant="ghost" size="sm" className="h-8 px-2 text-muted-foreground hover:text-foreground gap-1.5">
+            <IoStarOutline className="size-4" aria-hidden="true" />
+            <span className="text-xs font-medium">{post.bookmarks}</span>
+          </Button>
         </div>
       </footer>
     </article>
