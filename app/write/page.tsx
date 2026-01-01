@@ -1,4 +1,4 @@
-import { Editor } from '@/components/editor/dynamic-editor';
+import Editor from '@/app/write/_components/editor';
 import { Separator } from '@/components/ui/separator';
 
 const WritePage = () => {

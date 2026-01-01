@@ -7,7 +7,7 @@ import { BlockNoteView } from '@blocknote/shadcn';
 import '@blocknote/shadcn/style.css';
 import { useTheme } from 'next-themes';
 
-const Editor = () => {
+const EditorCore = () => {
   const { resolvedTheme } = useTheme();
   const editor = useCreateBlockNote({
     dictionary: ko,
@@ -17,4 +17,4 @@ const Editor = () => {
   });
   return <BlockNoteView editor={editor} theme={resolvedTheme === 'dark' ? 'dark' : 'light'} />;
 };
-export default Editor;
+export default EditorCore;
