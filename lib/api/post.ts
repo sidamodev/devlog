@@ -1,7 +1,9 @@
-import { MOCK_POSTS } from '@/mocks/mock-posts';
+import type { PostList } from '@/types/post';
 
-export const getPostList = async () => {
-  return Promise.resolve(MOCK_POSTS);
+export const getPostList = async (): Promise<PostList> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`);
+  const data = await response.json();
+  return data;
 };
 
 // export const getPostBySlug = async (slug: string) => {

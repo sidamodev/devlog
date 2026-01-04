@@ -1,4 +1,6 @@
-export const MOCK_POSTS = [
+import type { PostList } from '@/types/post';
+
+export const POST_LIST_FIXTURE: Readonly<PostList> = [
   {
     id: 'post-001',
     title: 'Next.js App Router에서 Server Actions로 폼 처리하기',
