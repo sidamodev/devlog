@@ -1,4 +1,4 @@
-import { apiClient } from '@/lib/api/apiClient';
+import { apiClient } from '@/lib/api/api-client';
 import type { PostList } from '@/types/post';
 
 export const getPostList = async () => {
