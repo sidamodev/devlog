@@ -1,13 +1,15 @@
 <div align="center">
 
-# ✨ devlog
+<img src="media/image.png" alt="devlog_logo" width="100">
+
+# devlog
 
 _생각에 집중할 수 있는, 개발자를 위한 세련된 블로그 서비스_
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![React Query](https://img.shields.io/badge/React_Query-Latest-FF4154?style=flat-square&logo=react-query&logoColor=white)](https://tanstack.com/query/latest)
+[![Tanstack Query](https://img.shields.io/badge/TanStack_Query-v5-FF4154?style=flat-square&logo=reactquery&logoColor=white)](https://tanstack.com/query/latest)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](./LICENSE)
 
 <!--
@@ -22,7 +24,7 @@ _생각에 집중할 수 있는, 개발자를 위한 세련된 블로그 서비�
 
 ## ✨ Key Features
 
-DevLog는 글쓰기에 방해받지 않는 경험을 제공합니다.
+devLog는 글쓰기에 방해받지 않는 경험을 제공합니다.
 
 🎨 **생각을 방해하지 않는 미니멀한 에디터**  
 Notion처럼 직관적인 블록 기반 에디터로, `/` 명령어만으로 모든 컨텐츠 블록을 생성할 수 있습니다.
