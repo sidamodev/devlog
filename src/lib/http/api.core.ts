@@ -29,7 +29,7 @@ class InterceptorManager<T, E = unknown> {
   }
 }
 
-export class ApiCore {
+export class ApiClientCore {
   private baseURL: string;
   private defaultHeaders: HeadersInit;
 
@@ -58,9 +58,7 @@ export class ApiCore {
     };
 
     const finalConfig = await this.interceptors.request.run(config);
-
     const response = await fetch(url, finalConfig);
-
     const finalResponse = await this.interceptors.response.run(response);
 
     if (!finalResponse.ok) {

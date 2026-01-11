@@ -1,5 +1,5 @@
 import PostItem from '@/components/post/post-item';
-import { getPostList } from '@/lib/api/post';
+import { getPostList } from '@/api/post';
 
 const MainPage = async () => {
   const posts = await getPostList();
