@@ -1,4 +1,4 @@
-import Providers from '@/providers/providers';
+import Providers from '@/app/providers';
 import AppHeader from '@/components/header/app-header';
 import AppNav from '@/components/navigation/app-nav';
 import type { Metadata } from 'next';
