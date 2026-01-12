@@ -2,7 +2,7 @@
 import LogoButton from '@/components/navigation/logo-button';
 import dynamic from 'next/dynamic';
 
-const ThemeSwitch = dynamic(() => import('@/components/switch/theme-switch'), { ssr: false });
+const ThemeSwitcher = dynamic(() => import('@/components/theme-switcher/theme-switcher'), { ssr: false });
 
 const AppHeader = () => {
   return (
@@ -10,7 +10,7 @@ const AppHeader = () => {
       <div>
         <LogoButton className="flex sm:hidden" />
       </div>
-      <ThemeSwitch />
+      <ThemeSwitcher />
     </header>
   );
 };

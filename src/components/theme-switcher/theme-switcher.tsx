@@ -1,7 +1,7 @@
 import { useTheme } from 'next-themes';
 import { LuMoon, LuSun } from 'react-icons/lu';
 
-const ThemeSwitch = () => {
+const ThemeSwitcher = () => {
   const { resolvedTheme, setTheme } = useTheme();
   return (
     <label className="h-6 w-12 relative cursor-pointer transition ease-in-out duration-500">
@@ -20,4 +20,4 @@ const ThemeSwitch = () => {
     </label>
   );
 };
-export default ThemeSwitch;
+export default ThemeSwitcher;
