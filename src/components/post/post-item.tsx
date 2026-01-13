@@ -1,24 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Post } from '@/features/posts/api/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AiOutlineLike } from 'react-icons/ai';
 import { IoChatbubbleOutline, IoStarOutline } from 'react-icons/io5';
 
-type PostType = {
-  id: string;
-  title: string;
-  author: string;
-  authorImage: string;
-  date: string;
-  image: string;
-  description: string;
-  likes: number;
-  comments: number;
-  bookmarks: number;
-};
-
-const PostItem = ({ post }: { post: PostType }) => {
+const PostItem = ({ post }: { post: Post }) => {
   return (
     <article className="flex flex-col">
       <header className="flex items-center gap-2 text-sm mb-2">
@@ -30,7 +18,7 @@ const PostItem = ({ post }: { post: PostType }) => {
           <span className="font-medium tracking-tight text-foreground">{post.author}</span>
         </Link>
         <span className="text-muted-foreground">·</span>
-        <time className="text-xs text-muted-foreground">{post.date}</time>
+        <time className="text-xs text-muted-foreground">{post.createdAt}</time>
       </header>
 
       <Link href={`/u/${post.author}/${post.title}`} className="group" aria-label={`${post.title} 글 보기`}>

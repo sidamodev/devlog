@@ -1,12 +1,12 @@
-import type { PostList } from '@/types/post';
+import type { Post } from '@/features/posts/api/types';
 
-export const POST_LIST_FIXTURE: Readonly<PostList> = [
+export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-001',
     title: 'Next.js App Router에서 Server Actions로 폼 처리하기',
     author: 'Kim Dev',
     authorImage: 'https://i.pravatar.cc/96?img=12',
-    date: '2025-12-24',
+    createdAt: '2025-12-24',
     image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80',
     description:
       'Server Actions를 적용하면서 생기는 캐싱/리밸리데이션 포인트와, 클라이언트 폼과 결합할 때의 패턴을 정리했습니다.',
@@ -19,7 +19,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'React Query vs SWR: 실무에서 선택 기준',
     author: 'Frontend Lee',
     authorImage: 'https://i.pravatar.cc/96?img=32',
-    date: '2025-12-20',
+    createdAt: '2025-12-20',
     image: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&q=80',
     description:
       '데이터 동기화, 캐시 무효화, mutation 처리 관점에서 어떤 팀/프로덕트에 어떤 선택이 맞는지 비교해봤습니다.',
@@ -32,7 +32,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'Tailwind로 line-clamp와 카드 레이아웃 깔끔하게 잡기',
     author: 'Jiyoon Park',
     authorImage: 'https://i.pravatar.cc/96?img=47',
-    date: '2025-12-18',
+    createdAt: '2025-12-18',
     image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80',
     description:
       '카드형 리스트에서 제목/본문 길이가 제각각일 때 높이 튐을 줄이는 구성과 유틸 조합을 예제로 공유합니다.',
@@ -45,7 +45,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'N+1 문제를 프론트에서 체감하는 순간들',
     author: 'Minsu Choi',
     authorImage: 'https://i.pravatar.cc/96?img=8',
-    date: '2025-12-15',
+    createdAt: '2025-12-15',
     image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=600&q=80',
     description:
       '리스트 + 상세 정보 조합에서 API를 어떻게 설계/호출해야 병목이 안 생기는지, BFF 패턴까지 함께 정리했습니다.',
@@ -58,7 +58,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'shadcn/ui Avatar 컴포넌트 커스터마이징 팁',
     author: 'Dev Park',
     authorImage: 'https://i.pravatar.cc/96?img=15',
-    date: '2025-12-10',
+    createdAt: '2025-12-10',
     image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=600&q=80',
     description:
       'Fallback 처리, 이미지 로딩 실패 대응, 사이즈 variants 구성 등 Avatar를 프로젝트 스타일에 맞추는 방법을 정리했습니다.',
@@ -72,7 +72,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'Next.js에서 이미지 최적화: next/image 실전 체크리스트',
     author: 'Sora Kim',
     authorImage: 'https://i.pravatar.cc/96?img=22',
-    date: '2025-12-08',
+    createdAt: '2025-12-08',
     image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80',
     description:
       'LCP 개선을 위해 sizes, priority, placeholder, 원본 이미지 품질까지 어떤 순서로 점검하면 좋은지 정리했습니다.',
@@ -85,7 +85,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'React 19 관점에서 본 useActionState 패턴',
     author: 'Hoon Jeong',
     authorImage: 'https://i.pravatar.cc/96?img=5',
-    date: '2025-12-06',
+    createdAt: '2025-12-06',
     image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1000&auto=format&fit=crop&q=60',
     description:
       '폼 제출 상태/에러/성공을 서버 액션과 함께 다룰 때 상태 모델을 어떻게 잡는지 예제 중심으로 설명합니다.',
@@ -98,7 +98,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'TanStack Table로 대용량 리스트 렌더링 최적화',
     author: 'Eunji Han',
     authorImage: 'https://i.pravatar.cc/96?img=41',
-    date: '2025-12-04',
+    createdAt: '2025-12-04',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
     description:
       '가상 스크롤, 컬럼 메모이제이션, 서버 페이징을 조합해 1만 건 이상에서도 UI가 버벅이지 않게 만든 경험을 공유합니다.',
@@ -111,7 +111,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'Zod 스키마로 폼 검증과 API 타입을 한 번에 맞추기',
     author: 'Taehyun Lim',
     authorImage: 'https://i.pravatar.cc/96?img=18',
-    date: '2025-12-02',
+    createdAt: '2025-12-02',
     image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=600&q=80',
     description:
       '폼에서 쓰는 validation을 API request/response 타입과 싱크시키는 방법과, 공통 스키마 분리 전략을 정리했습니다.',
@@ -124,7 +124,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'CSR/SSR/SSG/ISR: 팀에서 합의한 렌더링 선택 기준',
     author: 'Hyunwoo Seo',
     authorImage: 'https://i.pravatar.cc/96?img=29',
-    date: '2025-11-30',
+    createdAt: '2025-11-30',
     image: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=600&q=80',
     description: 'SEO, TTFB, 데이터 신선도, 캐시 비용을 기준으로 페이지별 렌더링 방식을 표준화한 과정을 소개합니다.',
     likes: 110,
@@ -136,7 +136,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'MSW로 프론트 개발 생산성 올리기: 시나리오 기반 목킹',
     author: 'Jisoo Kang',
     authorImage: 'https://i.pravatar.cc/96?img=52',
-    date: '2025-11-28',
+    createdAt: '2025-11-28',
     image: 'https://images.unsplash.com/photo-1556155092-8707de31f9c4?auto=format&fit=crop&w=600&q=80',
     description:
       '성공/실패/지연 응답을 시나리오로 나눠 관리하고, 스토리북/테스트에서 동일하게 재사용하는 패턴을 정리했습니다.',
@@ -149,7 +149,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'Next.js App Router에서 캐시가 “안 먹는” 흔한 원인 7가지',
     author: 'Dev Shin',
     authorImage: 'https://i.pravatar.cc/96?img=9',
-    date: '2025-11-26',
+    createdAt: '2025-11-26',
     image: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=600&q=80',
     description:
       'fetch 옵션, headers/cookies 사용, dynamic rendering 전파 등 캐시를 깨는 조건들을 체크리스트 형태로 모았습니다.',
@@ -162,7 +162,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'Monorepo에서 디자인 시스템 패키지 배포하기 (pnpm + changesets)',
     author: 'Hana Yoo',
     authorImage: 'https://i.pravatar.cc/96?img=36',
-    date: '2025-11-24',
+    createdAt: '2025-11-24',
     image: 'https://images.unsplash.com/photo-1556075798-4825dfaaf498?auto=format&fit=crop&w=600&q=80',
     description:
       '버전 관리, 릴리즈 노트, CI 파이프라인까지 포함해 사내 UI 패키지를 안정적으로 배포한 절차를 공유합니다.',
@@ -175,7 +175,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'React에서 “상태를 어디에 둘지” 결정하는 실무 규칙',
     author: 'Minjae Lee',
     authorImage: 'https://i.pravatar.cc/96?img=25',
-    date: '2025-11-22',
+    createdAt: '2025-11-22',
     image: 'https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=600&q=80',
     description: '서버 상태/클라이언트 상태/URL 상태를 구분하고, 상태의 소유권을 결정하는 기준을 사례로 정리했습니다.',
     likes: 134,
@@ -187,7 +187,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: '웹 접근성 빠르게 개선하는 ARIA 패턴 10선',
     author: 'Yerin Cho',
     authorImage: 'https://i.pravatar.cc/96?img=44',
-    date: '2025-11-20',
+    createdAt: '2025-11-20',
     image: 'https://images.unsplash.com/photo-1528498033373-3c6c08e93d79?auto=format&fit=crop&w=600&q=80',
     description:
       'Dialog, Tabs, MenuButton 등에서 자주 깨지는 속성을 중심으로, QA에서 바로 쓸 수 있는 체크포인트를 모았습니다.',
@@ -200,7 +200,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: '프론트엔드에서 보는 인증/인가: JWT가 만능이 아닌 이유',
     author: 'Donghyun Kim',
     authorImage: 'https://i.pravatar.cc/96?img=6',
-    date: '2025-11-18',
+    createdAt: '2025-11-18',
     image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80',
     description: '세션/쿠키, 토큰 탈취, 리프레시 토큰 회전, CSRF 대응까지 프론트 관점에서 오해를 정리했습니다.',
     likes: 160,
@@ -212,7 +212,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'Vite에서 환경 변수/프록시 설정을 안전하게 운영하는 법',
     author: 'Sejin Park',
     authorImage: 'https://i.pravatar.cc/96?img=20',
-    date: '2025-11-16',
+    createdAt: '2025-11-16',
     image: 'https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?auto=format&fit=crop&w=600&q=80',
     description: '개발/스테이징/프로덕션 환경 분리와, 프록시로 CORS를 우회할 때 생기는 실수 포인트를 정리했습니다.',
     likes: 49,
@@ -224,7 +224,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'Storybook으로 UI 회귀 테스트 루틴 만들기',
     author: 'Nari Jung',
     authorImage: 'https://i.pravatar.cc/96?img=54',
-    date: '2025-11-14',
+    createdAt: '2025-11-14',
     image: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=600&q=80',
     description:
       'Chromatic을 도입하면서 생긴 워크플로 변화와, “변경 감지” 기준을 팀 규칙으로 합의한 방법을 소개합니다.',
@@ -237,7 +237,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: 'Suspense로 로딩 UX 설계하기: 스켈레톤과 스트리밍',
     author: 'Aram Kim',
     authorImage: 'https://i.pravatar.cc/96?img=13',
-    date: '2025-11-12',
+    createdAt: '2025-11-12',
     image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80',
     description:
       '로딩 상태를 “보여주기”가 아니라 “흐름”으로 설계하는 관점에서, 경계 설정과 폴백 구성 팁을 정리했습니다.',
@@ -250,7 +250,7 @@ export const POST_LIST_FIXTURE: Readonly<PostList> = [
     title: '프론트 로그/트레이싱 표준화: Sentry로 이슈 재현률 올리기',
     author: 'Yongho Park',
     authorImage: 'https://i.pravatar.cc/96?img=39',
-    date: '2025-11-10',
+    createdAt: '2025-11-10',
     image: 'https://images.unsplash.com/photo-1556075798-4825dfaaf498?auto=format&fit=crop&w=600&q=80',
     description:
       '에러 이벤트에 어떤 context를 붙여야 재현이 쉬워지는지, breadcrumbs/태그/릴리즈 전략을 실무 기준으로 정리했습니다.',

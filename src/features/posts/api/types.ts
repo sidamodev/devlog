@@ -1,11 +1,13 @@
-export type PostList = Post[];
+import { PaginatedResponse } from '@/types/pagination';
+
+export type PostList = PaginatedResponse<Post>;
 
 export type Post = {
   id: string;
   title: string;
   author: string;
   authorImage: string;
-  date: string;
+  createdAt: string;
   image: string;
   description: string;
   likes: number;
