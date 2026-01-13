@@ -1,8 +1,8 @@
+import type { PostListResponse } from '@/features/posts/api/types';
 import { api } from '@/lib/http/api-client';
-import type { PostList } from '@/features/posts/api/types';
 
 export const getPostList = async ({ pageParam }: { pageParam: string | null }) => {
-  const response = await api.get<PostList>(`/?cursor=${pageParam}`);
+  const response = await api.get<PostListResponse>(`/?cursor=${pageParam}`);
   return response;
 };
 

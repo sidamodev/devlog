@@ -1,6 +1,6 @@
 import { PaginatedResponse } from '@/types/pagination';
 
-export type PostList = PaginatedResponse<Post>;
+export type PostListResponse = PaginatedResponse<Post>;
 
 export type Post = {
   id: string;
