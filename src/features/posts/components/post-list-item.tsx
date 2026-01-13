@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { AiOutlineLike } from 'react-icons/ai';
 import { IoChatbubbleOutline, IoStarOutline } from 'react-icons/io5';
 
-const PostItem = ({ post }: { post: Post }) => {
+const PostListItem = ({ post }: { post: Post }) => {
   return (
     <article className="flex flex-col">
       <header className="flex items-center gap-2 text-sm mb-2">
@@ -59,4 +59,4 @@ const PostItem = ({ post }: { post: Post }) => {
     </article>
   );
 };
-export default PostItem;
+export default PostListItem;
