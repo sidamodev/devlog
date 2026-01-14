@@ -4,7 +4,7 @@ export type PaginatedResponse<T> = {
 };
 
 export type PageInfo = {
-  nextCursor: string | null;
+  nextCursor?: string;
   hasNextPage: boolean;
   count: number;
 };

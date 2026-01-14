@@ -7,7 +7,7 @@ export const useInfinitePostList = () => {
   return useInfiniteQuery({
     queryKey: postKeys.lists(),
     queryFn: getPostList,
-    initialPageParam: null,
+    initialPageParam: undefined,
     getNextPageParam: (lastPage) => lastPage.pageInfo.nextCursor,
   });
 };

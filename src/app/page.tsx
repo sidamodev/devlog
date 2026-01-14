@@ -9,7 +9,7 @@ const MainPage = async () => {
   await queryClient.prefetchInfiniteQuery({
     queryKey: postKeys.lists(),
     queryFn: getPostList,
-    initialPageParam: null,
+    initialPageParam: undefined,
   });
   return (
     <section aria-label="Posts" className="w-full max-w-md sm:max-w-2xl">
