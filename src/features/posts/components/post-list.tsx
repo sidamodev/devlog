@@ -13,7 +13,7 @@ const PostList = () => {
     }
   };
 
-  const sentinelRef = useIntersectionObserver<HTMLDivElement>(handleIntersection);
+  const sentinelRef = useIntersectionObserver<HTMLLIElement>(handleIntersection);
 
   return (
     <ul className="flex flex-col rounded-3xl border bg-card sm:border-0 sm:bg-transparent p-4 sm:p-6 divide-y divide-border/40">
@@ -24,9 +24,9 @@ const PostList = () => {
           </li>
         )),
       )}
-      <div ref={sentinelRef} className="flex min-h-5 items-center justify-center py-4">
+      <li ref={sentinelRef} className="flex min-h-5 items-center justify-center py-4">
         {hasNextPage && <LuLoader className="h-6 w-6 animate-spin text-muted-foreground" />}
-      </div>
+      </li>
     </ul>
   );
 };
