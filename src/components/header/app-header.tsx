@@ -1,8 +1,5 @@
-'use client';
 import LogoButton from '@/components/navigation/logo-button';
-import dynamic from 'next/dynamic';
-
-const ThemeSwitcher = dynamic(() => import('@/components/theme-switcher/theme-switcher'), { ssr: false });
+import ThemeSwitcher from '../theme-switcher/theme-switcher';
 
 const AppHeader = () => {
   return (

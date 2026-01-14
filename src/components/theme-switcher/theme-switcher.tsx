@@ -1,8 +1,19 @@
+'use client';
 import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 import { LuMoon, LuSun } from 'react-icons/lu';
 
 const ThemeSwitcher = () => {
+  const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <label className="h-6 w-12 relative cursor-pointer transition ease-in-out duration-500">
       <input
