@@ -139,4 +139,17 @@
     background-color: transparent !important;
     padding-inline: 0 !important;
   }
+
+  .bn-suggestion-menu {
+    @apply max-h-96!;
+  }
+  .bn-suggestion-menu-item {
+    @apply text-xs! p-0.5!;
+  }
+  .bn-formatting-toolbar {
+    @apply gap-0.5!;
+  }
+  .bn-formatting-toolbar button {
+    @apply h-7! min-w-7!;
+  }
 }
