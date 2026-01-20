@@ -6,12 +6,19 @@ export type Post = {
   id: string;
   title: string;
   slug: string;
-  author: string;
-  authorImage: string;
+  authorId: string;
+  author: Author;
   createdAt: string;
   image: string;
   description: string;
   likes: number;
   comments: number;
   bookmarks: number;
+};
+
+export type Author = {
+  id: string;
+  username: string;
+  nickname: string;
+  avatar?: string;
 };

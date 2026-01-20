@@ -10,18 +10,18 @@ const PostListItem = ({ post }: { post: Post }) => {
   return (
     <article className="flex flex-col">
       <header className="flex items-center gap-2 text-sm mb-2">
-        <Link href={`/@${post.author}`} className="flex items-center gap-1 hover:underline">
+        <Link href={`/@${post.author.username}`} className="flex items-center gap-1 hover:underline">
           <Avatar className="size-5 sm:size-6">
-            <AvatarImage src={post.authorImage} />
-            <AvatarFallback>{post.author.charAt(0)}</AvatarFallback>
+            <AvatarImage src={post.author.avatar} />
+            <AvatarFallback>{post.author.nickname.charAt(0)}</AvatarFallback>
           </Avatar>
-          <span className="font-medium tracking-tight text-foreground">{post.author}</span>
+          <span className="font-medium tracking-tight text-foreground">{post.author.nickname}</span>
         </Link>
         <span className="text-muted-foreground">·</span>
         <time className="text-xs text-muted-foreground">{post.createdAt}</time>
       </header>
 
-      <Link href={`/@${post.author}/${post.slug}`} className="group" aria-label={`${post.title} 글 보기`}>
+      <Link href={`/@${post.author.username}/${post.slug}`} className="group" aria-label={`${post.title} 글 보기`}>
         <div className="flex mt-1">
           <div className="flex-1">
             <h2 className="sm:text-lg font-bold group-hover:underline">{post.title}</h2>
