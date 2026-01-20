@@ -10,7 +10,7 @@ const PostListItem = ({ post }: { post: Post }) => {
   return (
     <article className="flex flex-col">
       <header className="flex items-center gap-2 text-sm mb-2">
-        <Link href={`/u/${post.author}`} className="flex items-center gap-1 hover:underline">
+        <Link href={`/@${post.author}`} className="flex items-center gap-1 hover:underline">
           <Avatar className="size-5 sm:size-6">
             <AvatarImage src={post.authorImage} />
             <AvatarFallback>{post.author.charAt(0)}</AvatarFallback>
@@ -21,7 +21,7 @@ const PostListItem = ({ post }: { post: Post }) => {
         <time className="text-xs text-muted-foreground">{post.createdAt}</time>
       </header>
 
-      <Link href={`/u/${post.author}/${post.title}`} className="group" aria-label={`${post.title} 글 보기`}>
+      <Link href={`/@${post.author}/${post.slug}`} className="group" aria-label={`${post.title} 글 보기`}>
         <div className="flex mt-1">
           <div className="flex-1">
             <h2 className="sm:text-lg font-bold group-hover:underline">{post.title}</h2>

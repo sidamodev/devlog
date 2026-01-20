@@ -4,6 +4,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-001',
     title: 'Next.js App Router에서 Server Actions로 폼 처리하기',
+    slug: 'nextjs-app-router에서-server-actions로-폼-처리하기',
     author: 'Kim Dev',
     authorImage: 'https://i.pravatar.cc/96?img=12',
     createdAt: '2025-12-24',
@@ -17,6 +18,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-002',
     title: 'React Query vs SWR: 실무에서 선택 기준',
+    slug: 'react-query-vs-swr-실무에서-선택-기준',
     author: 'Frontend Lee',
     authorImage: 'https://i.pravatar.cc/96?img=32',
     createdAt: '2025-12-20',
@@ -30,6 +32,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-003',
     title: 'Tailwind로 line-clamp와 카드 레이아웃 깔끔하게 잡기',
+    slug: 'tailwind로-line-clamp와-카드-레이아웃-깔끔하게-잡기',
     author: 'Jiyoon Park',
     authorImage: 'https://i.pravatar.cc/96?img=47',
     createdAt: '2025-12-18',
@@ -43,6 +46,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-004',
     title: 'N+1 문제를 프론트에서 체감하는 순간들',
+    slug: 'n+1-문제를-프론트에서-체감하는-순간들',
     author: 'Minsu Choi',
     authorImage: 'https://i.pravatar.cc/96?img=8',
     createdAt: '2025-12-15',
@@ -56,6 +60,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-005',
     title: 'shadcn/ui Avatar 컴포넌트 커스터마이징 팁',
+    slug: 'shadcnui-avatar-컴포넌트-커스터마이징-팁',
     author: 'Dev Park',
     authorImage: 'https://i.pravatar.cc/96?img=15',
     createdAt: '2025-12-10',
@@ -66,10 +71,10 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
     comments: 7,
     bookmarks: 1,
   },
-
   {
     id: 'post-006',
     title: 'Next.js에서 이미지 최적화: next/image 실전 체크리스트',
+    slug: 'nextjs에서-이미지-최적화-nextimage-실전-체크리스트',
     author: 'Sora Kim',
     authorImage: 'https://i.pravatar.cc/96?img=22',
     createdAt: '2025-12-08',
@@ -83,6 +88,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-007',
     title: 'React 19 관점에서 본 useActionState 패턴',
+    slug: 'react-19-관점에서-본-useactionstate-패턴',
     author: 'Hoon Jeong',
     authorImage: 'https://i.pravatar.cc/96?img=5',
     createdAt: '2025-12-06',
@@ -96,6 +102,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-008',
     title: 'TanStack Table로 대용량 리스트 렌더링 최적화',
+    slug: 'tanstack-table로-대용량-리스트-렌더링-최적화',
     author: 'Eunji Han',
     authorImage: 'https://i.pravatar.cc/96?img=41',
     createdAt: '2025-12-04',
@@ -109,6 +116,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-009',
     title: 'Zod 스키마로 폼 검증과 API 타입을 한 번에 맞추기',
+    slug: 'zod-스키마로-폼-검증과-api-타입을-한-번에-맞추기',
     author: 'Taehyun Lim',
     authorImage: 'https://i.pravatar.cc/96?img=18',
     createdAt: '2025-12-02',
@@ -122,6 +130,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-010',
     title: 'CSR/SSR/SSG/ISR: 팀에서 합의한 렌더링 선택 기준',
+    slug: 'csrssrssgisr-팀에서-합의한-렌더링-선택-기준',
     author: 'Hyunwoo Seo',
     authorImage: 'https://i.pravatar.cc/96?img=29',
     createdAt: '2025-11-30',
@@ -134,6 +143,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-011',
     title: 'MSW로 프론트 개발 생산성 올리기: 시나리오 기반 목킹',
+    slug: 'msw로-프론트-개발-생산성-올리기-시나리오-기반-목킹',
     author: 'Jisoo Kang',
     authorImage: 'https://i.pravatar.cc/96?img=52',
     createdAt: '2025-11-28',
@@ -147,6 +157,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-012',
     title: 'Next.js App Router에서 캐시가 “안 먹는” 흔한 원인 7가지',
+    slug: 'nextjs-app-router에서-캐시가-안-먹는-흔한-원인-7가지',
     author: 'Dev Shin',
     authorImage: 'https://i.pravatar.cc/96?img=9',
     createdAt: '2025-11-26',
@@ -160,6 +171,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-013',
     title: 'Monorepo에서 디자인 시스템 패키지 배포하기 (pnpm + changesets)',
+    slug: 'monorepo에서-디자인-시스템-패키지-배포하기-pnpm-changesets',
     author: 'Hana Yoo',
     authorImage: 'https://i.pravatar.cc/96?img=36',
     createdAt: '2025-11-24',
@@ -173,6 +185,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-014',
     title: 'React에서 “상태를 어디에 둘지” 결정하는 실무 규칙',
+    slug: 'react에서-상태를-어디에-둘지-결정하는-실무-규칙',
     author: 'Minjae Lee',
     authorImage: 'https://i.pravatar.cc/96?img=25',
     createdAt: '2025-11-22',
@@ -185,6 +198,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-015',
     title: '웹 접근성 빠르게 개선하는 ARIA 패턴 10선',
+    slug: '웹-접근성-빠르게-개선하는-aria-패턴-10선',
     author: 'Yerin Cho',
     authorImage: 'https://i.pravatar.cc/96?img=44',
     createdAt: '2025-11-20',
@@ -198,6 +212,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-016',
     title: '프론트엔드에서 보는 인증/인가: JWT가 만능이 아닌 이유',
+    slug: '프론트엔드에서-보는-인증인가-jwt가-만능이-아닌-이유',
     author: 'Donghyun Kim',
     authorImage: 'https://i.pravatar.cc/96?img=6',
     createdAt: '2025-11-18',
@@ -210,6 +225,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-017',
     title: 'Vite에서 환경 변수/프록시 설정을 안전하게 운영하는 법',
+    slug: 'vite에서-환경-변수프록시-설정을-안전하게-운영하는-법',
     author: 'Sejin Park',
     authorImage: 'https://i.pravatar.cc/96?img=20',
     createdAt: '2025-11-16',
@@ -222,6 +238,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-018',
     title: 'Storybook으로 UI 회귀 테스트 루틴 만들기',
+    slug: 'storybook으로-ui-회귀-테스트-루틴-만들기',
     author: 'Nari Jung',
     authorImage: 'https://i.pravatar.cc/96?img=54',
     createdAt: '2025-11-14',
@@ -235,6 +252,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-019',
     title: 'Suspense로 로딩 UX 설계하기: 스켈레톤과 스트리밍',
+    slug: 'suspense로-로딩-ux-설계하기-스켈레톤과-스트리밍',
     author: 'Aram Kim',
     authorImage: 'https://i.pravatar.cc/96?img=13',
     createdAt: '2025-11-12',
@@ -248,6 +266,7 @@ export const POST_LIST_FIXTURE: Readonly<Post[]> = [
   {
     id: 'post-020',
     title: '프론트 로그/트레이싱 표준화: Sentry로 이슈 재현률 올리기',
+    slug: '프론트-로그트레이싱-표준화-sentry로-이슈-재현률-올리기',
     author: 'Yongho Park',
     authorImage: 'https://i.pravatar.cc/96?img=39',
     createdAt: '2025-11-10',
