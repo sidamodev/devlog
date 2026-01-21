@@ -4,27 +4,26 @@ import Link from 'next/link';
 import type { IconType } from 'react-icons';
 
 type NavButtonProps = {
-  defaultIcon: IconType;
-  activeIcon: IconType;
+  Icon: IconType;
   to: string;
   className?: string;
   active: boolean;
 };
 
-const NavButton = ({ defaultIcon: DefaultIcon, activeIcon: ActiveIcon, className, to, active }: NavButtonProps) => {
-  const Icon = active ? ActiveIcon : DefaultIcon;
+const NavButton = ({ Icon: DefaultIcon, className, to, active }: NavButtonProps) => {
+  const Icon = DefaultIcon;
   return (
     <Button
       asChild
       variant="ghost"
       className={cn(
-        'p-0 h-14 w-14 rounded-lg active:scale-90 transition duration-200 text-input',
+        'p-0 h-10 w-12 active:scale-90 transition duration-200 text-neutral-400 rounded-xl hover:text-none hover:bg-neutral-200 dark:hover:bg-accent',
         active && 'text-accent-foreground',
         className,
       )}
     >
       <Link href={to}>
-        <Icon className="size-6" />
+        <Icon className="size-5 sm:size-6" />
       </Link>
     </Button>
   );
