@@ -1,5 +1,5 @@
 import Logo from '@/assets/logo.svg';
-import { cn } from '@/lib/utils/class-name';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 const LogoButton = ({ className }: { className?: string }) => {

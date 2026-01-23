@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils/class-name';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import type { IconType } from 'react-icons';
 
