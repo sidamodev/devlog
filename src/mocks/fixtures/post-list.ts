@@ -1,6 +1,6 @@
-import type { Post } from '@/features/posts/api/types';
+import type { PostSummary } from '@/features/posts/api/types';
 
-export const POST_LIST_FIXTURE: Readonly<Post[]> = [
+export const POST_LIST_FIXTURE: Readonly<PostSummary[]> = [
   {
     id: 'post-001',
     title: 'Next.js App Router에서 Server Actions로 폼 처리하기',

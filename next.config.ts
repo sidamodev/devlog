@@ -2,6 +2,8 @@ import type { NextConfig } from 'next';
 import path from 'path';
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['@blocknote/server-util', '@blocknote/core'],
+
   /* config options here */
   turbopack: {
     root: path.join(__dirname),

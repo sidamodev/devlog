@@ -1,8 +1,8 @@
 import { PaginatedResponse } from '@/types/pagination';
 
-export type PostListResponse = PaginatedResponse<Post>;
+export type PostListResponse = PaginatedResponse<PostSummary>;
 
-export type Post = {
+export type PostSummary = {
   id: string;
   title: string;
   slug: string;
@@ -21,4 +21,10 @@ export type Author = {
   username: string;
   nickname: string;
   avatar?: string;
+};
+
+export type PostDetail = PostSummary & {
+  readingTime: number;
+  content: string; // Markdown 또는 HTML 본문
+  relatedPosts?: PostSummary[]; // (선택사항) 연관 게시글 추천 등
 };

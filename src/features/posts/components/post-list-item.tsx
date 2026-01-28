@@ -1,12 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Post } from '@/features/posts/api/types';
+import { PostSummary } from '@/features/posts/api/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AiOutlineLike } from 'react-icons/ai';
 import { IoChatbubbleOutline, IoStarOutline } from 'react-icons/io5';
 
-const PostListItem = ({ post }: { post: Post }) => {
+const PostListItem = ({ post }: { post: PostSummary }) => {
   return (
     <article className="flex flex-col">
       <header className="flex items-center gap-2 text-sm mb-2">
