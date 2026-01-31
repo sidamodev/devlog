@@ -39,7 +39,7 @@ export default function RootLayout({
             <AppNav />
             <div className="flex min-w-0 flex-col flex-1 pb-[calc(3.5rem+env(safe-area-inset-bottom))] sm:pb-0">
               <AppHeader />
-              <main className="flex w-full flex-col items-center p-4">{children}</main>
+              <main className="flex justify-center p-4">{children}</main>
             </div>
           </div>
         </Providers>
