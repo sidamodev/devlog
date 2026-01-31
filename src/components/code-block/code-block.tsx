@@ -29,7 +29,7 @@ export async function CodeBlock({ code, language = 'tsx', filename }: Highlighte
 
   return (
     <div className="my-8 rounded-xl overflow-hidden bg-[#22272e] shadow-xl border border-border/10">
-      <div className="flex items-center justify-between px-4 py-3 bg-[#2d333b] border-b border-[#444c56]">
+      <div className="flex items-center justify-between px-4 py-2 bg-[#2d333b] border-b border-[#444c56]">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]/50" />
           <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]/50" />
@@ -41,7 +41,10 @@ export async function CodeBlock({ code, language = 'tsx', filename }: Highlighte
         <CopyButton code={code} />
       </div>
 
-      <div className="py-4 mr-4 overflow-x-auto leading-6 font-mono" dangerouslySetInnerHTML={{ __html: html }} />
+      <div
+        className="py-4 mr-4 overflow-x-auto leading-6 font-mono text-sm sm:text-base"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
 
       <style>{`
         .shiki {
