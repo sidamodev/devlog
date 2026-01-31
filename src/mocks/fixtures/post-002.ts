@@ -1,7 +1,4 @@
-import { PostDetail } from '@/features/posts/api/types';
-
-// app/types/post.ts
-export const POST_DETAIL_002: PostDetail = {
+export const POST_DETAIL_002 = {
   // PostSummary 필드 (동일)
   id: 'post-002',
   title: 'React Query vs SWR: 실무에서 선택 기준',
@@ -23,16 +20,14 @@ export const POST_DETAIL_002: PostDetail = {
   readingTime: 12,
 
   // BlockNote defaultBlockSpecs 형태 (table 제거, 단순화)
-  content: JSON.stringify([
+  content: [
     {
       id: 'cover-image-block',
       type: 'image',
       props: {
         url: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&q=80',
-        caption: '', // 필요시 description 내용을 넣을 수 있습니다.
+        caption: 'Image Caption',
         previewWidth: 1024,
-        backgroundColor: 'default',
-        textAlignment: 'center',
       },
       children: [],
     },
@@ -59,6 +54,23 @@ export const POST_DETAIL_002: PostDetail = {
           type: 'text',
           text: ' 명확한 기준이 필요했고, 6개월간의 프로덕션 경험을 바탕으로 정리해봤습니다.',
           styles: {},
+        },
+      ],
+      children: [],
+    },
+    {
+      id: 'quote',
+      type: 'paragraph',
+      props: {
+        textColor: 'default',
+        backgroundColor: 'default',
+        textAlignment: 'left',
+      },
+      content: [
+        {
+          type: 'text',
+          text: 'The best architecture is the one that allows your team to move fast while maintaining code quality. It should be invisible to new developers—intuitive enough that the right patterns feel obvious.',
+          styles: { italic: true },
         },
       ],
       children: [],
@@ -532,7 +544,7 @@ mutate(\`/api/posts/\${id}\`);`,
       ],
       children: [],
     },
-  ]),
+  ],
 
   relatedPosts: [
     // (이전과 동일)

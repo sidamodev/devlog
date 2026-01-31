@@ -1,4 +1,5 @@
 import { PaginatedResponse } from '@/types/pagination';
+import { Block } from '@blocknote/core';
 
 export type PostListResponse = PaginatedResponse<PostSummary>;
 
@@ -25,6 +26,6 @@ export type Author = {
 
 export type PostDetail = PostSummary & {
   readingTime: number;
-  content: string; // Markdown 또는 HTML 본문
+  content: Block[]; // Markdown 또는 HTML 본문
   relatedPosts?: PostSummary[]; // (선택사항) 연관 게시글 추천 등
 };
