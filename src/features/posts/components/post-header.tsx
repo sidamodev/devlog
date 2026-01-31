@@ -41,16 +41,17 @@ const PostHeader = ({ title, description, author, createdAt, readingTime, tags }
         </Avatar>
 
         <div className="flex flex-col">
-          <span className="font-sans font-medium text-foreground">{author.nickname}</span>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground font-sans">
+          <span className="font-sans font-medium text-foreground text-sm">{author.nickname}</span>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <time dateTime={createdAt}>{createdAt}</time>
             <span>·</span>
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-0.5">
               <LuClock />
-              {readingTime}분 소요
+              <span className="tracking-tighter">{readingTime}분 소요</span>
             </span>
           </div>
         </div>
+        
       </div>
     </header>
   );
