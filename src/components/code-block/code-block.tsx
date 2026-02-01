@@ -5,10 +5,9 @@ import { CopyButton } from './copy-button';
 interface HighlightedCodeProps {
   code: string;
   language?: string;
-  filename?: string;
 }
 
-export async function CodeBlock({ code, language = 'tsx', filename }: HighlightedCodeProps) {
+export async function CodeBlock({ code, language = 'text' }: HighlightedCodeProps) {
   const html = await codeToHtml(code, {
     lang: language,
     theme: 'github-dark-dimmed',
@@ -36,7 +35,7 @@ export async function CodeBlock({ code, language = 'tsx', filename }: Highlighte
           <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]/50" />
         </div>
 
-        {filename && <div className="text-xs font-mono text-gray-400 font-medium">{filename}</div>}
+        <div className="text-xs font-mono tracking-tight text-gray-400 font-bold">{language.toUpperCase()}</div>
 
         <CopyButton code={code} />
       </div>
