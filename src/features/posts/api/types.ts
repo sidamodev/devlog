@@ -4,28 +4,30 @@ import { Block } from '@blocknote/core';
 export type PostListResponse = PaginatedResponse<PostSummary>;
 
 export type PostSummary = {
-  id: string;
+  id: number;
   title: string;
   slug: string;
-  authorId: string;
+  authorId: number;
   author: Author;
   createdAt: string;
-  image: string;
+  updatedAt: string;
+  thumbnail: string;
   description: string;
-  likes: number;
-  comments: number;
-  bookmarks: number;
+  likeCount: number;
+  commentCount: number;
+  bookmarkCount: number;
+  readingTime: number;
+  content: unknown[];
 };
 
 export type Author = {
-  id: string;
+  id: number;
   username: string;
   nickname: string;
   avatar?: string;
 };
 
 export type PostDetail = PostSummary & {
-  readingTime: number;
   content: Block[]; // Markdown 또는 HTML 본문
   relatedPosts?: PostSummary[]; // (선택사항) 연관 게시글 추천 등
 };

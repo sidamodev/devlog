@@ -13,13 +13,13 @@ export const handlers = [
 
     const start = cursor * PAGE_SIZE;
     const fixtureLen = POST_LIST_FIXTURE.length;
-
     const data = Array.from({ length: PAGE_SIZE }, (_, i) => {
       const offset = start + i;
       const base = POST_LIST_FIXTURE[offset % fixtureLen];
+
       return {
         ...base,
-        id: `${base.id}__${offset}`,
+        id: offset + 1,
       };
     });
     return HttpResponse.json({

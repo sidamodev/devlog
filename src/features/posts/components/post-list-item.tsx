@@ -30,7 +30,7 @@ const PostListItem = ({ post }: { post: PostSummary }) => {
 
           <figure className="ml-2 sm:ml-4 relative h-26 w-22 shrink-0 overflow-hidden rounded-sm sm:h-30 sm:w-42 border shadow-lg">
             <Image
-              src={post.image}
+              src={post.thumbnail}
               alt={post.title}
               fill
               sizes="(max-width: 640px) 180px, 126px"
@@ -44,15 +44,15 @@ const PostListItem = ({ post }: { post: PostSummary }) => {
         <div className="flex items-center gap-0.5 -ml-2">
           <Button variant="ghost" size="sm" className="h-8 px-2 text-muted-foreground hover:text-foreground gap-1">
             <AiOutlineLike className="size-4" aria-hidden="true" />
-            <span className="text-xs font-medium">{post.likes}</span>
+            <span className="text-xs font-medium">{post.likeCount}</span>
           </Button>
           <Button variant="ghost" size="sm" className="h-8 px-2 text-muted-foreground hover:text-foreground gap-1">
             <IoChatbubbleOutline className="size-4" aria-hidden="true" />
-            <span className="text-xs font-medium">{post.comments}</span>
+            <span className="text-xs font-medium">{post.commentCount}</span>
           </Button>
           <Button variant="ghost" size="sm" className="h-8 px-2 text-muted-foreground hover:text-foreground gap-1">
             <IoStarOutline className="size-4" aria-hidden="true" />
-            <span className="text-xs font-medium">{post.bookmarks}</span>
+            <span className="text-xs font-medium">{post.bookmarkCount}</span>
           </Button>
         </div>
       </footer>

@@ -1,25 +1,5 @@
 export const POST_DETAIL_002 = {
-  // PostSummary 필드 (동일)
-  id: 'post-002',
-  title: 'React Query vs SWR: 실무에서 선택 기준',
-  slug: 'react-query-vs-swr-실무에서-선택-기준',
-  authorId: 'user-032',
-  author: {
-    id: 'user-032',
-    username: 'frontendlee',
-    nickname: 'Frontend Lee',
-    avatar: 'https://i.pravatar.cc/96?img=32',
-  },
-  createdAt: '2025-12-20',
-  image: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&q=80',
-  description:
-    '데이터 동기화, 캐시 무효화, mutation 처리 관점에서 어떤 팀/프로덕트에 어떤 선택이 맞는지 비교해봤습니다.',
-  likes: 76,
-  comments: 19,
-  bookmarks: 5,
-  readingTime: 12,
-
-  // BlockNote defaultBlockSpecs 형태 (table 제거, 단순화)
+  id: 2,
   content: [
     {
       id: 'cover-image-block',

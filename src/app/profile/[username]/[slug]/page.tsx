@@ -2,7 +2,7 @@ import { BlockRenderer } from '@/components/block-renderer/block-renderer';
 import PostContent from '@/features/posts/components/post-content';
 import PostFooter from '@/features/posts/components/post-footer';
 import PostHeader from '@/features/posts/components/post-header';
-import { POST_DETAIL_002 } from '@/mocks/fixtures/post-002';
+import { POST_DETAIL_002 } from '@/mocks/fixtures/post-2';
 import { Block } from '@blocknote/core';
 
 const PostDetailPage = async ({ params }: { params: Promise<{ username: string; slug: string }> }) => {
