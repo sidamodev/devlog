@@ -25,7 +25,7 @@ export type ListGroup = {
 
 export type GroupedBlock = Block | ListGroup;
 type BlockType = Block['type'];
-type BlockOf<T extends BlockType> = Extract<Block, { type: T }>;
+export type BlockOf<T extends BlockType> = Extract<Block, { type: T }>;
 
 interface BlockRendererProps {
   blocks: Block[];

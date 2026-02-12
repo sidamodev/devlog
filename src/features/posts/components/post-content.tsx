@@ -9,6 +9,7 @@ const PostContent = async ({ children, className }: PostDetailContentProps) => (
   <div
     className={cn(
       'prose dark:prose-invert max-w-none',
+      '[&>*:first-child>*:first-child]:mt-0!',
       'prose-headings:prose-headings:font-bold prose-headings:tracking-tight',
       'prose-p:leading-relaxed prose-p:mb-8 prose-p:text-foreground/90',
       'prose-blockquote:font-serif prose-blockquote:border-l-4 prose-blockquote:border-primary/50 prose-blockquote:pl-6 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:bg-muted/30 prose-blockquote:py-2 prose-blockquote:pr-4 prose-blockquote:rounded-r-lg',
