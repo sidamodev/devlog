@@ -51,7 +51,6 @@ const PostHeader = ({ title, description, author, createdAt, readingTime, tags }
             </span>
           </div>
         </div>
-        
       </div>
     </header>
   );
