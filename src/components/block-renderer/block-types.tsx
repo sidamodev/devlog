@@ -1,13 +1,9 @@
 // block-types.tsx
-import { Block } from '@blocknote/core';
-import Image from 'next/image';
-import { InlineContent } from './inline-content';
 import { CodeBlock } from '@/components/code-block/code-block';
+import Image from 'next/image';
+import type { BlockOf, ListGroup } from './block-renderer';
 import { BlockRenderer } from './block-renderer';
-import type { ListGroup } from './block-renderer';
-import { readString, readNumber, readBoolean, renderInlineOrText, extractTextFromContent } from './block-utils';
-
-const getProps = (block: Block): Record<string, unknown> => block.props as Record<string, unknown>;
+import { InlineContent } from './inline-content';
 
 // ============================================================
 // List Block
@@ -34,9 +30,8 @@ export function ListGroupBlock({ block }: { block: ListGroup }) {
 // ============================================================
 // Text Blocks
 // ============================================================
-export function HeadingBlock({ block }: { block: Block }) {
-  const props = getProps(block);
-  const level = Math.min((readNumber(props.level) ?? 1), 6);
+export function HeadingBlock({ block }: { block: BlockOf<'heading'> }) {
+  const level = Math.min(block.props.level ?? 1, 6);
   const Tag = `h${level}` as keyof React.JSX.IntrinsicElements;
 
   return (
@@ -46,7 +41,7 @@ export function HeadingBlock({ block }: { block: Block }) {
   );
 }
 
-export function ParagraphBlock({ block }: { block: Block }) {
+export function ParagraphBlock({ block }: { block: BlockOf<'paragraph'> }) {
   return (
     <p>
       <InlineContent content={block.content} />
@@ -54,7 +49,7 @@ export function ParagraphBlock({ block }: { block: Block }) {
   );
 }
 
-export function QuoteBlock({ block }: { block: Block }) {
+export function QuoteBlock({ block }: { block: BlockOf<'quote'> }) {
   return (
     <blockquote>
       <p>
@@ -64,27 +59,26 @@ export function QuoteBlock({ block }: { block: Block }) {
   );
 }
 
-export function DividerBlock({}: { block: Block }) {
+export function DividerBlock({}: { block: BlockOf<'divider'> }) {
   return <hr />;
 }
 
 // ============================================================
 // Code Block
 // ============================================================
-export function CodeBlockRenderer({ block }: { block: Block }) {
-  const props = getProps(block);
-  const code = extractTextFromContent(block.content);
-  const language = readString(props.language) ?? '';
+export function CodeBlockRenderer({ block }: { block: BlockOf<'codeBlock'> }) {
+  const code = Array.isArray(block.content)
+    ? block.content.map((item) => (item.type === 'text' ? item.text : '')).join('')
+    : '';
 
-  return <CodeBlock code={code} language={language} />;
+  return <CodeBlock code={code} language={block.props.language} />;
 }
 
 // ============================================================
 // Interactive Blocks
 // ============================================================
-export function CheckListBlock({ block }: { block: Block }) {
-  const props = getProps(block);
-  const checked = readBoolean(props.checked) ?? false;
+export function CheckListBlock({ block }: { block: BlockOf<'checkListItem'> }) {
+  const checked = block.props.checked ?? false;
 
   return (
     <div className="flex items-start gap-2">
@@ -101,7 +95,7 @@ export function CheckListBlock({ block }: { block: Block }) {
   );
 }
 
-export function ToggleListBlock({ block }: { block: Block }) {
+export function ToggleListBlock({ block }: { block: BlockOf<'toggleListItem'> }) {
   return (
     <details open>
       <summary>
@@ -119,17 +113,12 @@ export function ToggleListBlock({ block }: { block: Block }) {
 // ============================================================
 // Table Block
 // ============================================================
-type TableContent = {
-  rows?: Array<{ cells?: unknown[] }>;
-  headerRows?: number;
-  headerCols?: number;
-};
 
-export function TableBlock({ block }: { block: Block }) {
-  const tableContent = block.content as TableContent | undefined;
+export function TableBlock({ block }: { block: BlockOf<'table'> }) {
+  const tableContent = block.content;
   const rows = Array.isArray(tableContent?.rows) ? tableContent.rows : [];
-  const headerRows = Math.max(0, readNumber(tableContent?.headerRows) ?? 0);
-  const headerCols = Math.max(0, readNumber(tableContent?.headerCols) ?? 0);
+  const headerRows = Math.max(0, tableContent?.headerRows ?? 0);
+  const headerCols = Math.max(0, tableContent?.headerCols ?? 0);
 
   if (rows.length === 0) {
     return null;
@@ -144,14 +133,11 @@ export function TableBlock({ block }: { block: Block }) {
               {(row.cells ?? []).map((cell, cellIndex) => {
                 const isHeader = rowIndex < headerRows || cellIndex < headerCols;
                 const Tag = isHeader ? 'th' : 'td';
-                const cellContent = getCellContent(cell);
+                const cellContent = Array.isArray(cell) ? cell : cell.content;
 
                 return (
-                  <Tag 
-                    key={`cell-${rowIndex}-${cellIndex}`} 
-                    className="border border-border p-2 text-left align-top"
-                  >
-                    {renderInlineOrText(cellContent)}
+                  <Tag key={`cell-${rowIndex}-${cellIndex}`} className="border border-border p-2 text-left align-top">
+                    <InlineContent content={cellContent} />
                   </Tag>
                 );
               })}
@@ -163,99 +149,76 @@ export function TableBlock({ block }: { block: Block }) {
   );
 }
 
-function getCellContent(cell: unknown) {
-  return cell && typeof cell === 'object' && 'content' in cell 
-    ? (cell as { content?: unknown }).content 
-    : cell;
-}
-
 // ============================================================
 // Media Blocks
 // ============================================================
 const DEFAULT_IMAGE_WIDTH = 1024;
 const DEFAULT_IMAGE_HEIGHT = 768;
 
-export function ImageBlock({ block }: { block: Block }) {
-  const props = getProps(block);
-  const url = readString(props.url);
+export function ImageBlock({ block }: { block: BlockOf<'image'> }) {
+  const url = block.props.url;
   if (!url) return null;
 
-  const caption = readString(props.caption);
-  const width = readNumber(props.previewWidth) ?? DEFAULT_IMAGE_WIDTH;
+  const caption = block.props.caption;
+  const width = block.props.previewWidth ?? DEFAULT_IMAGE_WIDTH;
 
   return (
     <figure>
-      <Image 
-        src={url} 
-        alt={caption ?? 'Post image'} 
-        className="w-full object-cover aspect-2/1" 
-        width={width} 
-        height={DEFAULT_IMAGE_HEIGHT} 
+      <Image
+        src={url}
+        alt={caption ?? 'Post image'}
+        className="w-full object-cover aspect-2/1"
+        width={width}
+        height={DEFAULT_IMAGE_HEIGHT}
+        loading="eager"
       />
       {caption && <figcaption className="text-center text-sm">{caption}</figcaption>}
     </figure>
   );
 }
 
-export function AudioBlock({ block }: { block: Block }) {
-  const props = getProps(block);
-  const url = readString(props.url);
+export function AudioBlock({ block }: { block: BlockOf<'audio'> }) {
+  const url = block.props.url;
   if (!url) return null;
 
-  const caption = readString(props.caption);
-  const showPreview = readBoolean(props.showPreview) ?? true;
+  const caption = block.props.caption;
+  const showPreview = block.props.showPreview ?? true;
 
   return (
     <figure>
-      {showPreview && (
-        <audio controls src={url} className="w-full" preload="metadata" />
-      )}
-      <a 
-        href={url} 
-        target="_blank" 
-        rel="noreferrer" 
-        className="text-blue-600 hover:underline break-all"
-      >
+      {showPreview && <audio controls src={url} className="w-full" preload="metadata" />}
+      <a href={url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline break-all">
         {caption ?? 'Open audio'}
       </a>
     </figure>
   );
 }
 
-export function VideoBlock({ block }: { block: Block }) {
-  const props = getProps(block);
-  const url = readString(props.url);
+export function VideoBlock({ block }: { block: BlockOf<'video'> }) {
+  const url = block.props.url;
   if (!url) return null;
 
-  const caption = readString(props.caption);
-  const showPreview = readBoolean(props.showPreview) ?? true;
+  const caption = block.props.caption;
+  const showPreview = block.props.showPreview ?? true;
 
   return (
     <figure>
-      {showPreview && (
-        <video controls src={url} className="w-full" preload="metadata" />
-      )}
+      {showPreview && <video controls src={url} className="w-full" preload="metadata" />}
       {caption && <figcaption className="text-center text-sm">{caption}</figcaption>}
     </figure>
   );
 }
 
-export function FileBlock({ block }: { block: Block }) {
-  const props = getProps(block);
-  const url = readString(props.url);
+export function FileBlock({ block }: { block: BlockOf<'file'> }) {
+  const url = block.props.url;
   if (!url) return null;
 
-  const name = readString(props.name) ?? 'Download file';
-  const caption = readString(props.caption);
+  const name = block.props.name ?? 'Download file';
+  const caption = block.props.caption;
 
   return (
     <figure>
-      <a 
-        href={url} 
-        target="_blank" 
-        rel="noreferrer" 
-        className="text-blue-600 hover:underline break-all"
-      >
+      <a href={url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline break-all">
         {name}
       </a>
       {caption && <figcaption className="text-center text-sm">{caption}</figcaption>}
