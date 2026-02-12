@@ -3,6 +3,7 @@ import type { Prisma } from '../generated/prisma/client';
 import { POST_DETAIL_001 } from '../src/mocks/fixtures/post-1';
 import { POST_DETAIL_002 } from '../src/mocks/fixtures/post-2';
 import { POST_DETAIL_003 } from '../src/mocks/fixtures/post-3';
+import { POST_DETAIL_004 } from '../src/mocks/fixtures/post-4';
 import { POST_LIST_FIXTURE } from '../src/mocks/fixtures/post-list';
 
 type PostDetailFixture = {
@@ -10,7 +11,7 @@ type PostDetailFixture = {
   body: Prisma.InputJsonValue;
 };
 
-const DETAIL_FIXTURES: Readonly<PostDetailFixture[]> = [POST_DETAIL_001, POST_DETAIL_002, POST_DETAIL_003];
+const DETAIL_FIXTURES: Readonly<PostDetailFixture[]> = [POST_DETAIL_001, POST_DETAIL_002, POST_DETAIL_003, POST_DETAIL_004];
 const detailById = new Map<number, PostDetailFixture>(DETAIL_FIXTURES.map((detail) => [detail.id, detail]));
 
 const toInputJson = (value: unknown): Prisma.InputJsonValue => value as Prisma.InputJsonValue;
@@ -45,7 +46,7 @@ async function main() {
     userIdByUsername.set(item.author.username, user.id);
   }
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < DETAIL_FIXTURES.length; i++) {
     const item = POST_LIST_FIXTURE[i];
     const userId = userIdByUsername.get(item.author.username);
     if (!userId) {
