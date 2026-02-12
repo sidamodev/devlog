@@ -1,6 +1,6 @@
 export const POST_DETAIL_002 = {
   id: 2,
-  content: [
+  body: [
     {
       id: 'cover-image-block',
       type: 'image',
@@ -40,11 +40,10 @@ export const POST_DETAIL_002 = {
     },
     {
       id: 'quote',
-      type: 'paragraph',
+      type: 'quote',
       props: {
         textColor: 'default',
         backgroundColor: 'default',
-        textAlignment: 'left',
       },
       content: [
         {

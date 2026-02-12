@@ -20,7 +20,7 @@ type PostFixtureBase = {
 };
 
 export type PostFixture = PostFixtureBase & {
-  content: unknown[];
+  body: unknown[];
   readingTime: number;
   updatedAt: string;
 };
@@ -408,7 +408,7 @@ const getIsoDateTime = (date: string) => `${date}T00:00:00.000Z`;
 
 export const POST_LIST_FIXTURE: Readonly<PostFixture[]> = BASE_POST_LIST_FIXTURE.map((post) => ({
   ...post,
-  content: [],
+  body: [],
   readingTime: 5,
   createdAt: getIsoDateTime(post.createdAt),
   updatedAt: getIsoDateTime(post.createdAt),

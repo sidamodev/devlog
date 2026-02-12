@@ -22,7 +22,7 @@ model Post {
   title       String
   thumbnail   String?
   description String
-  content     Json
+  body        Json
   readingTime Int
 
   likeCount     Int @default(0)

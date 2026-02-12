@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { PostSummary } from '@/features/posts/api/types';
+import type { PostSummary } from '@/features/posts/model/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AiOutlineLike } from 'react-icons/ai';
@@ -29,13 +29,17 @@ const PostListItem = ({ post }: { post: PostSummary }) => {
           </div>
 
           <figure className="ml-2 sm:ml-4 relative h-26 w-22 shrink-0 overflow-hidden rounded-sm sm:h-30 sm:w-42 border shadow-lg">
-            <Image
-              src={post.thumbnail}
-              alt={post.title}
-              fill
-              sizes="(max-width: 640px) 180px, 126px"
-              className="object-cover transition-opacity group-hover:opacity-80"
-            />
+            {post.thumbnail ? (
+              <Image
+                src={post.thumbnail}
+                alt={post.title}
+                fill
+                sizes="(max-width: 640px) 180px, 126px"
+                className="object-cover transition-opacity group-hover:opacity-80"
+              />
+            ) : (
+              <div className="h-full w-full bg-muted" aria-hidden="true" />
+            )}
           </figure>
         </div>
       </Link>

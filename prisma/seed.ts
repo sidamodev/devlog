@@ -7,7 +7,7 @@ import { POST_LIST_FIXTURE } from '../src/mocks/fixtures/post-list';
 
 type PostDetailFixture = {
   id: number;
-  content: Prisma.InputJsonValue;
+  body: Prisma.InputJsonValue;
 };
 
 const DETAIL_FIXTURES: Readonly<PostDetailFixture[]> = [POST_DETAIL_001, POST_DETAIL_002, POST_DETAIL_003];
@@ -53,7 +53,7 @@ async function main() {
     }
 
     const detail = detailById.get(item.id);
-    const content = toInputJson(detail?.content ?? item.content);
+    const body = toInputJson(detail?.body ?? item.body);
 
     await prisma.post.create({
       data: {
@@ -62,7 +62,7 @@ async function main() {
         title: item.title,
         thumbnail: item.thumbnail,
         description: item.description,
-        content,
+        body,
         readingTime: item.readingTime,
         likeCount: item.likeCount,
         commentCount: item.commentCount,

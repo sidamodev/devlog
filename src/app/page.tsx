@@ -1,5 +1,5 @@
 import { postKeys } from '@/features/posts/api/keys';
-import { getPostList } from '@/features/posts/api/service';
+import { getPostList } from '@/features/posts/api/post-list-service';
 import PostList from '@/features/posts/components/post-list';
 import getQueryClient from '@/lib/get-query-client';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';

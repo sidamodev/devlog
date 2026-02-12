@@ -23,6 +23,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.2.4",
+    "hashids": "^2.3.0",
     "next": "^16.1.6",
     "next-themes": "^0.4.6",
     "pg": "^8.18.0",

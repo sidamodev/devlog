@@ -1,15 +1,57 @@
-import { Block } from '@blocknote/core';
+// block-renderer.tsx
+import type { Block } from '@blocknote/core';
 import React from 'react';
-import { InlineContent } from './inline-content';
-import { CodeBlock } from '@/components/code-block/code-block';
-import Image from 'next/image';
+import { 
+  HeadingBlock, 
+  ParagraphBlock, 
+  DividerBlock, 
+  QuoteBlock, 
+  CodeBlockRenderer,
+  CheckListBlock,
+  ToggleListBlock,
+  TableBlock,
+  ImageBlock,
+  AudioBlock,
+  VideoBlock,
+  FileBlock,
+  ListGroupBlock
+} from './block-types';
 
-export type GroupedBlock = Block | { type: 'list-group'; listType: string; items: Block[] };
+export type ListGroup = { 
+  type: 'list-group'; 
+  listType: 'bulletListItem' | 'numberedListItem'; 
+  items: Block[] 
+};
 
-/**
- * 인접한 리스트 아이템을 하나의 그룹으로 묶어줍니다.
- * 렌더링 단계에서 복잡한 while 루프를 제거하기 위함입니다.
- */
+export type GroupedBlock = Block | ListGroup;
+type BlockType = Block['type'];
+type BlockOf<T extends BlockType> = Extract<Block, { type: T }>;
+
+interface BlockRendererProps {
+  blocks: Block[];
+}
+
+type RendererMap = {
+  [K in BlockType]?: React.ComponentType<{ block: BlockOf<K> }>;
+};
+
+const BLOCK_RENDERERS = {
+  heading: HeadingBlock,
+  paragraph: ParagraphBlock,
+  divider: DividerBlock,
+  quote: QuoteBlock,
+  codeBlock: CodeBlockRenderer,
+  checkListItem: CheckListBlock,
+  toggleListItem: ToggleListBlock,
+  table: TableBlock,
+  image: ImageBlock,
+  audio: AudioBlock,
+  video: VideoBlock,
+  file: FileBlock,
+} satisfies RendererMap;
+
+const hasRenderer = (type: BlockType): type is keyof typeof BLOCK_RENDERERS => type in BLOCK_RENDERERS;
+
 export function groupBlocks(blocks: Block[]): GroupedBlock[] {
   const result: GroupedBlock[] = [];
   let i = 0;
@@ -39,17 +81,13 @@ export function groupBlocks(blocks: Block[]): GroupedBlock[] {
 
   return result;
 }
-interface BlockRendererProps {
-  blocks: Block[];
-}
 
-export async function BlockRenderer({ blocks }: BlockRendererProps) {
+export function BlockRenderer({ blocks }: BlockRendererProps) {
   const groupedBlocks = groupBlocks(blocks);
 
   return (
     <div className="space-y-4">
       {groupedBlocks.map((block, index) => {
-        // block.id가 없는 가상 그룹일 수 있으므로 index를 키로 활용하거나 고유 ID 생성
         const key = 'id' in block ? block.id : `group-${index}`;
         return <BlockSelector key={key} block={block} />;
       })}
@@ -57,95 +95,24 @@ export async function BlockRenderer({ blocks }: BlockRendererProps) {
   );
 }
 
-// ----------------------------------------------------------------------
-// 개별 블록 렌더러 (파일 분리 권장)
-// ----------------------------------------------------------------------
-
 function BlockSelector({ block }: { block: GroupedBlock }) {
-  // 1. 리스트 그룹 처리
+  // 리스트 그룹 처리
   if ('type' in block && block.type === 'list-group') {
-    // 타입 단언을 안전하게 처리
-    const listBlock = block as { listType: string; items: Block[] };
-    const ListTag = listBlock.listType === 'bulletListItem' ? 'ul' : 'ol';
-
-    return (
-      <ListTag>
-        {listBlock.items.map((item) => (
-          <li key={item.id}>
-            <InlineContent content={item.content} />
-            {item.children.length > 0 && (
-              /* 재귀 호출 */
-              <div className="mt-1">
-                <BlockRenderer blocks={item.children} />
-              </div>
-            )}
-          </li>
-        ))}
-      </ListTag>
-    );
+    return <ListGroupBlock block={block as ListGroup} />;
   }
 
-  // 2. 일반 블록 처리
   const standardBlock = block as Block;
-
-  switch (standardBlock.type) {
-    case 'heading': {
-      // 레벨 제한 (h1~h6)
-      const level = Math.min((standardBlock.props.level as number) || 1, 6);
-      const Tag = `h${level}` as keyof React.JSX.IntrinsicElements;
-
-      return (
-        <Tag id={standardBlock.id}>
-          <InlineContent content={standardBlock.content} />
-        </Tag>
-      );
+  if (!hasRenderer(standardBlock.type)) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`Unknown block type: ${standardBlock.type}`);
     }
 
-    case 'paragraph': {
-      // 특수 케이스: Divider & Quote (기존 로직 유지)
-      if (standardBlock.id === 'divider') return <hr />;
-      if (standardBlock.id === 'quote') {
-        return (
-          <blockquote>
-            <p>
-              <InlineContent content={standardBlock.content} />
-            </p>
-          </blockquote>
-        );
-      }
-      return (
-        <p>
-          <InlineContent content={standardBlock.content} />
-        </p>
-      );
-    }
-
-    case 'codeBlock': {
-      let code = '';
-      if (Array.isArray(standardBlock.content)) {
-        code = standardBlock.content.map((item) => (item.type === 'text' ? item.text : '')).join('');
-      }
-      return <CodeBlock code={code} language={standardBlock.props.language as string} />;
-    }
-
-    case 'image':
-      return (
-        <figure>
-          <Image
-            src={standardBlock.props.url}
-            alt="Code on a computer screen"
-            className="w-full object-cover aspect-2/1"
-            width={standardBlock.props.previewWidth}
-            height={768}
-          />
-          <figcaption className="text-center text-sm">{standardBlock.props.caption}</figcaption>
-        </figure>
-      );
-
-    default:
-      if (process.env.NODE_ENV === 'development') {
-        console.warn(`Unknown block type: ${standardBlock.type}`);
-      }
-      return null;
+    return null;
   }
+
+  const BlockComponent = BLOCK_RENDERERS[standardBlock.type];
+
+  // 등록된 렌더러가 있으면 사용
+  const TypedBlockComponent = BlockComponent as React.ComponentType<{ block: typeof standardBlock }>;
+  return <TypedBlockComponent block={standardBlock} />;
 }

@@ -1,9 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { PostDetail } from '@/features/posts/api/types';
+import type { PostDetail } from '@/features/posts/model/types';
 import { LuClock } from 'react-icons/lu';
 
-type PostHeaderProps = Omit<PostDetail, 'content'> & {
+type PostHeaderProps = Omit<PostDetail, 'body'> & {
   tags?: string[];
 };
 

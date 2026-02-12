@@ -1,6 +1,6 @@
 export const POST_DETAIL_003 = {
   id: 3,
-  content: [
+  body: [
     {
       type: 'heading',
       props: {
