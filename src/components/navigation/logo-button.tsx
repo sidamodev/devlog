@@ -7,7 +7,7 @@ const LogoButton = ({ className }: { className?: string }) => {
     <Link
       href="/"
       className={cn(
-        'hidden sm:flex justify-center items-center p-0 h-16 rounded-lg active:scale-100 transition duration-300 text-accent-foreground dark:hover:bg-transparent hover:bg-transparent hover:scale-120',
+        'justify-center items-center p-0 h-16 rounded-lg active:scale-100 transition duration-300 text-accent-foreground dark:hover:bg-transparent hover:bg-transparent hover:scale-120',
         className,
       )}
     >

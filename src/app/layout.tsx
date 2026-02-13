@@ -34,11 +34,11 @@ export default function RootLayout({
         className={`${pretendard.variable} ${jetbrainsMono.variable} font-sans antialiased bg-accent/60 dark:bg-background`}
       >
         <Providers>
-          <div className="flex min-h-screen">
+          <div className="min-h-screen">
+            <AppHeader />
             <AppNav />
-            <div className="flex min-w-0 flex-col flex-1 pb-[calc(3.5rem+env(safe-area-inset-bottom))] sm:pb-0">
-              <AppHeader />
-              <main className="flex justify-center p-4">{children}</main>
+            <div className="min-w-0 pb-[calc(3.5rem+env(safe-area-inset-bottom))] sm:pb-0">
+              <main className="flex justify-center p-4 sm:ml-20">{children}</main>
             </div>
           </div>
         </Providers>
