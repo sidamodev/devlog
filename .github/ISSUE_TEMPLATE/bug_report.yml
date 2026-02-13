@@ -1,0 +1,30 @@
+name: "🐛 버그 제보 (Bug Report)"
+description: "수정할 버그를 간단히 기록합니다."
+title: "[Fix]: "
+labels:
+  - "fix"
+assignees:
+  - "sidamodev"
+body:
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: 버그 내용
+      placeholder: 실제 동작 / 기대 동작을 간단히 작성해주세요.
+    validations:
+      required: true
+
+  - type: input
+    id: done_criteria
+    attributes:
+      label: 완료 조건
+      placeholder: 예) 동일 증상이 더 이상 재현되지 않으면 완료
+
+  - type: textarea
+    id: task_list
+    attributes:
+      label: 작업 목록
+      value: |
+        - [ ] 원인 파악
+        - [ ] 수정
+        - [ ] 확인
