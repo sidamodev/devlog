@@ -30,7 +30,7 @@ export async function CodeBlock({ code, language = 'text' }: HighlightedCodeProp
   const [lightHtml, darkHtml] = await Promise.all([buildHtml('github-light'), buildHtml('github-dark-dimmed')]);
 
   return (
-    <div className="my-8 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 shadow-xl dark:border-zinc-700 dark:bg-[#22272e]">
+    <div className="code-block my-8 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 shadow-xl dark:border-zinc-700 dark:bg-[#22272e]">
       <div className="flex items-center justify-between border-b border-zinc-200 bg-zinc-100 px-4 py-2 dark:border-[#444c56] dark:bg-[#2d333b]">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]/50" />
@@ -38,21 +38,32 @@ export async function CodeBlock({ code, language = 'text' }: HighlightedCodeProp
           <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]/50" />
         </div>
 
-        <div className="font-mono text-xs font-bold tracking-tight text-zinc-500 dark:text-gray-400">{language.toUpperCase()}</div>
+        <div className="font-mono text-xs font-bold tracking-tight text-zinc-500 dark:text-gray-400">
+          {language.toUpperCase()}
+        </div>
 
         <CopyButton code={code} />
       </div>
 
       <div
-        className="mr-4 overflow-x-auto py-4 font-mono text-xs leading-6 dark:hidden sm:text-sm"
+        className="code-scroll-area overflow-x-auto pt-3 pb-1 font-mono text-xs leading-6 dark:hidden sm:text-sm"
         dangerouslySetInnerHTML={{ __html: lightHtml }}
       />
       <div
-        className="mr-4 hidden overflow-x-auto py-4 font-mono text-xs leading-6 dark:block sm:text-sm"
+        className="code-scroll-area hidden overflow-x-auto pt-3 pb-1 font-mono text-xs leading-6 dark:block sm:text-sm"
         dangerouslySetInnerHTML={{ __html: darkHtml }}
       />
 
       <style>{`
+        .code-block {
+          --cb-scroll-thumb: #c3cbd4;
+          --cb-scroll-thumb-hover: #aab4bf;
+        }
+        html.dark .code-block {
+          --cb-scroll-thumb: #444c56;
+          --cb-scroll-thumb-hover: #545d68;
+        }
+
         .shiki {
           background-color: transparent !important;
           margin: 0;
@@ -76,15 +87,24 @@ export async function CodeBlock({ code, language = 'text' }: HighlightedCodeProp
           left: 0;
           width: 2rem;
           text-align: right;
+          letter-spacing: -0.05em;
           color: rgba(115, 138, 148, 0.55);
           user-select: none;              /* 드래그 선택 시 번호 제외 */
         }
 
         /* Custom scrollbar */
-        ::-webkit-scrollbar { height: 4px; width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #444c56; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #545d68; }
+        .code-scroll-area {
+          scrollbar-width: thin;
+          scrollbar-color: var(--cb-scroll-thumb) transparent;
+        }
+        .code-block ::-webkit-scrollbar-track { background: transparent; }
+        .code-block ::-webkit-scrollbar-thumb {
+          background: var(--cb-scroll-thumb);
+          border: 1px solid transparent;
+          background-clip: content-box;
+          border-radius: 999px;
+        }
+        .code-block ::-webkit-scrollbar-thumb:hover { background: var(--cb-scroll-thumb-hover); }
       `}</style>
     </div>
   );
