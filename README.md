@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="media/image.png" alt="devlog_logo" width="100">
+<img src="docs/assets/devlog-logo.png" alt="devlog_logo" width="100">
 
 # devlog
 
@@ -10,7 +10,7 @@ _생각에 집중할 수 있는, 개발자를 위한 세련된 블로그 서비�
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Tanstack Query](https://img.shields.io/badge/TanStack_Query-v5-FF4154?style=flat-square&logo=reactquery&logoColor=white)](https://tanstack.com/query/latest)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](./LICENSE)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
 <!--
 아래 주석을 해제하고 스크린샷을 추가하세요
@@ -52,7 +52,38 @@ Notion처럼 직관적인 블록 기반 에디터로, `/` 명령어만으로 모
 |    UI     | shadcn/ui, React Icons                   |
 |  Editor   | BlockNote (`@blocknote/react`)           |
 |   Data    | TanStack Query (`@tanstack/react-query`) |
+|    DB     | Prisma, PostgreSQL                       |
+|  Testing  | MSW (Mock Service Worker)                |
 
 </div>
 
 ---
+
+## 🚀 Getting Started
+
+로컬 실행 및 환경 설정은 아래 문서를 참고하세요.
+
+- [Setup Guide](./docs/setup.md)
+
+---
+
+## 🗂️ Project Structure
+
+```text
+src/
+  app/                 # App Router pages and API routes
+  components/          # Shared UI and editor components
+  features/posts/      # Post domain logic (api, hooks, server)
+  lib/                 # Shared libraries (prisma, api client, utils)
+  mocks/               # MSW handlers and fixtures
+prisma/
+  schema.prisma        # Prisma schema
+  migrations/          # Prisma migrations
+  seed.ts              # Seed script
+```
+
+---
+
+## 📄 License
+
+[MIT License](./LICENSE)
