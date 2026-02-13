@@ -6,6 +6,15 @@ labels:
 assignees:
   - 'sidamodev'
 body:
+  - type: input
+    id: branch_slug
+    attributes:
+      label: Branch Slug (영문, kebab-case)
+      placeholder: 예) fix-login-redirect
+      description: 브랜치명에 들어갈 짧은 영문 값을 입력해주세요.
+    validations:
+      required: true
+
   - type: textarea
     id: bug_description
     attributes:
