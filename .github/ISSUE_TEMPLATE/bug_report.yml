@@ -1,10 +1,10 @@
-name: "🐛 버그 제보 (Bug Report)"
-description: "수정할 버그를 간단히 기록합니다."
-title: "[Fix]: "
+name: '🐛 버그 제보 (Bug Report)'
+description: '수정할 버그를 기록합니다.'
+title: '[Fix]: '
 labels:
-  - "fix"
+  - 'fix'
 assignees:
-  - "sidamodev"
+  - 'sidamodev'
 body:
   - type: textarea
     id: bug_description

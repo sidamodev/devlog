@@ -1,10 +1,10 @@
-name: "✨ 기능 추가 (Feature Request)"
-description: "구현할 기능만 간단히 기록합니다."
-title: "[Feat]: "
+name: '✨ 기능 추가 (Feature Request)'
+description: '구현할 기능을 기록합니다.'
+title: '[Feat]: '
 labels:
-  - "feat"
+  - 'feat'
 assignees:
-  - "sidamodev"
+  - 'sidamodev'
 body:
   - type: textarea
     id: feature_description
