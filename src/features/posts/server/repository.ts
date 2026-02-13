@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { prisma } from '@/lib/prisma';
+import type { Prisma } from '../../../../generated/prisma/client';
 
 const postInclude = {
   author: {
@@ -25,6 +26,50 @@ export const findPostList = async (cursor: number | undefined, pageSize: number)
 export const findPostById = async (id: number) => {
   return prisma.post.findUnique({
     where: { id },
+    include: postInclude,
+  });
+};
+
+export const findOrCreateDefaultAuthor = async () => {
+  const existingAuthor = await prisma.user.findFirst({
+    orderBy: { id: 'asc' },
+    select: { id: true, username: true, nickname: true, avatar: true },
+  });
+
+  if (existingAuthor) {
+    return existingAuthor;
+  }
+
+  return prisma.user.create({
+    data: {
+      username: 'writer',
+      nickname: 'Writer',
+      avatar: null,
+    },
+    select: { id: true, username: true, nickname: true, avatar: true },
+  });
+};
+
+type CreatePostRecordInput = {
+  authorId: number;
+  slug: string;
+  title: string;
+  description: string;
+  body: Prisma.InputJsonValue;
+  readingTime: number;
+};
+
+export const createPostRecord = async (input: CreatePostRecordInput) => {
+  return prisma.post.create({
+    data: {
+      authorId: input.authorId,
+      slug: input.slug,
+      title: input.title,
+      description: input.description,
+      body: input.body,
+      readingTime: input.readingTime,
+      thumbnail: null,
+    },
     include: postInclude,
   });
 };

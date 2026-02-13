@@ -1,25 +1,9 @@
-import Editor from '@/components/editor';
-import { Separator } from '@/components/ui/separator';
+import WritePostForm from '@/features/posts/components/write-post-form';
 
 const WritePage = () => {
   return (
-    <div className="flex max-w-sm sm:max-w-2xl justify-center overflow-clip">
-      <div className="flex w-full flex-col gap-4 p-8">
-        <section aria-label="제목 입력란">
-          <label htmlFor="title" className="sr-only">
-            제목
-          </label>
-          <input
-            className="outline-hidden h-10 text-5xl max-lg:text-4xl p-0 bg-transparent font-extrabold"
-            placeholder="제목"
-            name="title"
-          />
-        </section>
-        <Separator />
-        <section aria-label="본문 입력">
-          <Editor />
-        </section>
-      </div>
+    <div className="flex w-full max-w-sm justify-center overflow-clip sm:max-w-2xl">
+      <WritePostForm />
     </div>
   );
 };

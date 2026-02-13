@@ -14,6 +14,18 @@ type FetchOptions = RequestInit & {
   };
 };
 
+export class ApiError<T = unknown> extends Error {
+  status: number;
+  data?: T;
+
+  constructor(message: string, status: number, data?: T) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.data = data;
+  }
+}
+
 /**
  * 요청 또는 응답을 가로채서 처리하는 인터셉터 관리자 클래스입니다.
  * @template T - 처리할 값의 타입 (RequestInit 또는 Response)
@@ -105,7 +117,23 @@ class ApiClient {
     const finalResponse = await this.interceptors.response.run(response);
 
     if (!finalResponse.ok) {
-      throw new Error(`API Error: ${finalResponse.status}`);
+      let errorData: unknown;
+
+      try {
+        errorData = await finalResponse.clone().json();
+      } catch {
+        errorData = undefined;
+      }
+
+      const message =
+        typeof errorData === 'object' &&
+        errorData !== null &&
+        'message' in errorData &&
+        typeof (errorData as { message?: unknown }).message === 'string'
+          ? (errorData as { message: string }).message
+          : `API Error: ${finalResponse.status}`;
+
+      throw new ApiError(message, finalResponse.status, errorData);
     }
 
     return await finalResponse.json();
