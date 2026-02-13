@@ -8,41 +8,48 @@ interface HighlightedCodeProps {
 }
 
 export async function CodeBlock({ code, language = 'text' }: HighlightedCodeProps) {
-  const html = await codeToHtml(code, {
-    lang: language,
-    theme: 'github-dark-dimmed',
-    transformers: [
-      transformerRemoveLineBreak(),
-      {
-        name: 'line-numbers',
-        pre(node) {
-          this.addClassToHast(node, 'has-line-numbers');
+  const buildHtml = (theme: string) =>
+    codeToHtml(code, {
+      lang: language,
+      theme,
+      transformers: [
+        transformerRemoveLineBreak(),
+        {
+          name: 'line-numbers',
+          pre(node) {
+            this.addClassToHast(node, 'has-line-numbers');
+          },
+          line(node, line) {
+            this.addClassToHast(node, 'code-line');
+            node.properties['data-line'] = line; // 1부터 시작
+          },
         },
-        line(node, line) {
-          this.addClassToHast(node, 'code-line');
-          node.properties['data-line'] = line; // 1부터 시작
-        },
-      },
-    ],
-  });
+      ],
+    });
+
+  const [lightHtml, darkHtml] = await Promise.all([buildHtml('github-light'), buildHtml('github-dark-dimmed')]);
 
   return (
-    <div className="my-8 rounded-xl overflow-hidden bg-[#22272e] shadow-xl border border-border/10">
-      <div className="flex items-center justify-between px-4 py-2 bg-[#2d333b] border-b border-[#444c56]">
+    <div className="my-8 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 shadow-xl dark:border-zinc-700 dark:bg-[#22272e]">
+      <div className="flex items-center justify-between border-b border-zinc-200 bg-zinc-100 px-4 py-2 dark:border-[#444c56] dark:bg-[#2d333b]">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]/50" />
           <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]/50" />
           <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]/50" />
         </div>
 
-        <div className="text-xs font-mono tracking-tight text-gray-400 font-bold">{language.toUpperCase()}</div>
+        <div className="font-mono text-xs font-bold tracking-tight text-zinc-500 dark:text-gray-400">{language.toUpperCase()}</div>
 
         <CopyButton code={code} />
       </div>
 
       <div
-        className="py-4 mr-4 overflow-x-auto leading-6 font-mono text-sm sm:text-base"
-        dangerouslySetInnerHTML={{ __html: html }}
+        className="mr-4 overflow-x-auto py-4 font-mono text-xs leading-6 dark:hidden sm:text-sm"
+        dangerouslySetInnerHTML={{ __html: lightHtml }}
+      />
+      <div
+        className="mr-4 hidden overflow-x-auto py-4 font-mono text-xs leading-6 dark:block sm:text-sm"
+        dangerouslySetInnerHTML={{ __html: darkHtml }}
       />
 
       <style>{`
@@ -58,7 +65,7 @@ export async function CodeBlock({ code, language = 'text' }: HighlightedCodeProp
         }
         pre.shiki.has-line-numbers .code-line {
           display: block;                 /* 한 줄씩 줄바꿈 */
-          padding-left: 3rem;          /* 번호 영역 확보 */
+          padding-left: 2.5rem;          /* 번호 영역 확보 */
           position: relative;
           min-height: 1lh; /* 한 줄 높이 보장 */
         }
@@ -74,7 +81,7 @@ export async function CodeBlock({ code, language = 'text' }: HighlightedCodeProp
         }
 
         /* Custom scrollbar */
-        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar { height: 4px; width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #444c56; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #545d68; }
