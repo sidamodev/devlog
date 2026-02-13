@@ -1,8 +1,8 @@
 'use client';
-import PostListItem from '@/features/posts/components/post-list-item';
+import { useInfinitePostList } from '@/features/posts/client/use-infinite-post-list';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { LuLoader } from 'react-icons/lu';
-import { useInfinitePostList } from '../hooks/use-get-post-list';
+import PostListItem from './post-list-item';
 
 const PostList = () => {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfinitePostList();

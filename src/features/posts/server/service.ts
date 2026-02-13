@@ -1,7 +1,7 @@
 import 'server-only';
 
 import type { Block } from '@blocknote/core';
-import type { PostDetail } from '@/features/posts/model/types';
+import type { PostDetail } from '@/features/posts/shared/post.types';
 import { hashids } from '@/lib/hashid';
 import { createPostRecord, findOrCreateDefaultAuthor, findPostById, findPostList } from './repository';
 import type { Prisma } from '../../../../generated/prisma/client';

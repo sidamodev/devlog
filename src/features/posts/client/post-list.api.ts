@@ -1,5 +1,5 @@
-import type { PostListApiResponse, PostSummaryDto } from '@/features/posts/api/dto';
-import type { PostListResponse, PostSummary } from '@/features/posts/model/types';
+import type { PostListApiResponse, PostSummaryDto } from '@/features/posts/shared/post.contracts';
+import type { PostListResponse, PostSummary } from '@/features/posts/shared/post.types';
 import { api } from '@/lib/http/api-client';
 
 export const getPostList = async ({ pageParam }: { pageParam?: string }) => {

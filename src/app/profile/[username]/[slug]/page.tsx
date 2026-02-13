@@ -1,8 +1,8 @@
 import { BlockRenderer } from '@/components/block-renderer/block-renderer';
 import { getPostDetail } from '@/features/posts/server/service';
-import PostContent from '@/features/posts/components/post-content';
-import PostFooter from '@/features/posts/components/post-footer';
-import PostHeader from '@/features/posts/components/post-header';
+import PostContent from '@/features/posts/ui/post-content';
+import PostFooter from '@/features/posts/ui/post-footer';
+import PostHeader from '@/features/posts/ui/post-header';
 import { notFound } from 'next/navigation';
 
 const PostDetailPage = async ({ params }: { params: Promise<{ username: string; slug: string }> }) => {

@@ -70,7 +70,7 @@ const parseTags = (value: string): string[] => {
   );
 };
 
-const WritePostForm = () => {
+const PostWriteForm = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editorKey, setEditorKey] = useState(0);
@@ -210,4 +210,4 @@ const WritePostForm = () => {
   );
 };
 
-export default WritePostForm;
+export default PostWriteForm;

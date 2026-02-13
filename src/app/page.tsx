@@ -1,6 +1,6 @@
-import { postKeys } from '@/features/posts/api/keys';
-import { getPostList } from '@/features/posts/api/post-list-service';
-import PostList from '@/features/posts/components/post-list';
+import { getPostList } from '@/features/posts/client/post-list.api';
+import { postKeys } from '@/features/posts/client/post-query-keys';
+import PostList from '@/features/posts/ui/post-list';
 import getQueryClient from '@/lib/get-query-client';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
