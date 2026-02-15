@@ -2,19 +2,12 @@
 
 import {
   createPost,
-  type CreatePostErrors,
   type CreatePostFailure,
   type CreatePostInput,
   type CreatePostSuccess,
 } from '@/features/posts/server/service';
 
-export type CreatePostActionResult =
-  | CreatePostSuccess
-  | {
-      ok: false;
-      message: string;
-      errors?: CreatePostErrors;
-    };
+export type CreatePostActionResult = CreatePostSuccess | CreatePostFailure;
 
 const toActionInput = (input: {
   title: string;
@@ -26,11 +19,7 @@ const toActionInput = (input: {
   tags: input.tags,
 });
 
-const toActionFailure = (result: CreatePostFailure): Extract<CreatePostActionResult, { ok: false }> => ({
-  ok: false,
-  message: result.message,
-  errors: result.errors,
-});
+const toActionFailure = (result: CreatePostFailure): Extract<CreatePostActionResult, { ok: false }> => result;
 
 export const createPostAction = async (input: {
   title: string;

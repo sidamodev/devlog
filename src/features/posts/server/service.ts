@@ -1,16 +1,17 @@
 import 'server-only';
 
 import type { Block } from '@blocknote/core';
+import { validateCreatePostInput } from '@/features/posts/server/create-post.schema';
+import {
+  CREATE_POST_MESSAGES,
+  type CreatePostFieldErrors,
+} from '@/features/posts/shared/create-post.rules';
 import type { PostDetail } from '@/features/posts/shared/post.types';
 import { hashids } from '@/lib/hashid';
 import { createPostRecord, findOrCreateDefaultAuthor, findPostById, findPostList } from './repository';
 import type { Prisma } from '../../../../generated/prisma/client';
 
 const PAGE_SIZE = 20;
-const TITLE_MIN_LENGTH = 1;
-const TITLE_MAX_LENGTH = 120;
-const TAG_MAX_COUNT = 10;
-const TAG_MAX_LENGTH = 20;
 const DESCRIPTION_MAX_LENGTH = 140;
 
 export type CreatePostInput = {
@@ -19,11 +20,8 @@ export type CreatePostInput = {
   tags?: unknown;
 };
 
-export type CreatePostErrors = {
-  title?: string;
-  body?: string;
-  tags?: string;
-};
+export type CreatePostErrors = CreatePostFieldErrors;
+export type CreatePostErrorCode = 'VALIDATION_ERROR' | 'INTERNAL_ERROR';
 
 export type CreatePostSuccess =
   | {
@@ -45,9 +43,11 @@ export type CreatePostSuccess =
 export type CreatePostFailure =
   | {
       ok: false;
-      status: 400 | 500;
-      message: string;
-      errors?: CreatePostErrors;
+      error: {
+        code: CreatePostErrorCode;
+        message: string;
+        fieldErrors?: CreatePostErrors;
+      };
     };
 
 export type CreatePostResult = CreatePostSuccess | CreatePostFailure;
@@ -111,47 +111,6 @@ const decodeCursor = (cursor: string | null): number | undefined => {
  */
 const encodeCursor = (id: number): string => hashids.encode(id);
 
-const isBlockArray = (value: unknown): value is Block[] => {
-  if (!Array.isArray(value)) return false;
-  return value.every((item) => typeof item === 'object' && item !== null);
-};
-
-const collectTextFromInline = (content: unknown): string => {
-  if (typeof content === 'string') {
-    return content;
-  }
-
-  if (!Array.isArray(content)) {
-    return '';
-  }
-
-  return content
-    .map((item) => {
-      if (typeof item === 'string') return item;
-      if (item && typeof item === 'object' && 'text' in item) {
-        const text = (item as { text?: unknown }).text;
-        return typeof text === 'string' ? text : '';
-      }
-      return '';
-    })
-    .join(' ');
-};
-
-const collectTextFromBlocks = (blocks: Block[]): string => {
-  return blocks
-    .map((block) => {
-      const currentText = collectTextFromInline((block as { content?: unknown }).content);
-      const children = (block as { children?: unknown }).children;
-      if (Array.isArray(children) && children.length > 0) {
-        return [currentText, collectTextFromBlocks(children as Block[])].join(' ');
-      }
-      return currentText;
-    })
-    .join(' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-};
-
 const toSlug = (title: string): string => {
   const normalized = title
     .trim()
@@ -164,18 +123,6 @@ const toSlug = (title: string): string => {
   return normalized.length > 0 ? normalized : 'post';
 };
 
-const sanitizeTags = (input: unknown): string[] => {
-  if (input === undefined) return [];
-  if (!Array.isArray(input)) return [];
-
-  const normalized = input
-    .filter((tag): tag is string => typeof tag === 'string')
-    .map((tag) => tag.trim())
-    .filter((tag) => tag.length > 0);
-
-  return Array.from(new Set(normalized));
-};
-
 const getReadingTime = (text: string): number => {
   const words = text.trim().split(/\s+/).filter(Boolean).length;
   if (words === 0) return 1;
@@ -183,57 +130,6 @@ const getReadingTime = (text: string): number => {
 };
 
 const toInputJson = (value: unknown): Prisma.InputJsonValue => value as Prisma.InputJsonValue;
-
-const validateCreatePostInput = (input: CreatePostInput) => {
-  const title = typeof input.title === 'string' ? input.title.trim() : '';
-  const body = input.body;
-  const tags = sanitizeTags(input.tags);
-  const errors: CreatePostErrors = {};
-
-  if (title.length < TITLE_MIN_LENGTH) {
-    errors.title = '제목은 필수 입력값입니다.';
-  } else if (title.length > TITLE_MAX_LENGTH) {
-    errors.title = `제목은 ${TITLE_MAX_LENGTH}자 이하로 입력해주세요.`;
-  }
-
-  if (!isBlockArray(body)) {
-    errors.body = '본문 형식이 올바르지 않습니다.';
-  }
-
-  const plainText = isBlockArray(body) ? collectTextFromBlocks(body) : '';
-  if (!plainText) {
-    errors.body = '본문은 필수 입력값입니다.';
-  }
-
-  if (tags.length > TAG_MAX_COUNT) {
-    errors.tags = `태그는 최대 ${TAG_MAX_COUNT}개까지 입력할 수 있습니다.`;
-  } else if (tags.some((tag) => tag.length > TAG_MAX_LENGTH)) {
-    errors.tags = `태그는 ${TAG_MAX_LENGTH}자 이하로 입력해주세요.`;
-  }
-
-  const isValid = Object.keys(errors).length === 0;
-
-  return {
-    isValid,
-    errors,
-    title,
-    body: isBlockArray(body) ? body : [],
-    tags,
-    plainText,
-  };
-};
-
-const normalizeCreatePostInput = (input: unknown): CreatePostInput => {
-  if (!input || typeof input !== 'object') {
-    return { title: '', body: undefined };
-  }
-
-  return {
-    title: typeof (input as { title?: unknown }).title === 'string' ? (input as { title: string }).title : '',
-    body: (input as { body?: unknown }).body,
-    tags: (input as { tags?: unknown }).tags,
-  };
-};
 
 /**
  * 게시글 목록 응답 DTO를 생성합니다.
@@ -306,24 +202,27 @@ export const getPostDetail = async (slug: string): Promise<PostDetail | null> =>
 
 export const createPost = async (input: unknown): Promise<CreatePostResult> => {
   try {
-    const validated = validateCreatePostInput(normalizeCreatePostInput(input));
-    if (!validated.isValid) {
+    const validated = validateCreatePostInput(input);
+    if (!validated.success) {
       return {
         ok: false,
-        status: 400,
-        message: '입력값을 확인해주세요.',
-        errors: validated.errors,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: CREATE_POST_MESSAGES.invalidInput,
+          fieldErrors: validated.fieldErrors,
+        },
       };
     }
 
+    const { title, body, plainText } = validated.data;
     const author = await findOrCreateDefaultAuthor();
     const created = await createPostRecord({
       authorId: author.id,
-      slug: toSlug(validated.title),
-      title: validated.title,
-      description: validated.plainText.slice(0, DESCRIPTION_MAX_LENGTH),
-      body: toInputJson(validated.body),
-      readingTime: getReadingTime(validated.plainText),
+      slug: toSlug(title),
+      title,
+      description: plainText.slice(0, DESCRIPTION_MAX_LENGTH),
+      body: toInputJson(body),
+      readingTime: getReadingTime(plainText),
     });
 
     return {
@@ -344,8 +243,10 @@ export const createPost = async (input: unknown): Promise<CreatePostResult> => {
   } catch {
     return {
       ok: false,
-      status: 500,
-      message: '게시글 등록 중 오류가 발생했습니다.',
+      error: {
+        code: 'INTERNAL_ERROR',
+        message: CREATE_POST_MESSAGES.internalError,
+      },
     };
   }
 };
