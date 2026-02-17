@@ -13,7 +13,7 @@ const PostDetailPage = async ({ params }: { params: Promise<{ username: string; 
   }
 
   return (
-    <article className="flex flex-col min-w-0 md:max-w-3xl mx-0">
+    <article className="mx-0 flex w-full min-w-0 flex-col md:max-w-3xl">
       <PostHeader {...post} />
       <PostContent>
         <BlockRenderer blocks={post.body} />

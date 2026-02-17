@@ -8,7 +8,11 @@ const STYLE_RENDERERS: Record<string, (children: React.ReactNode) => React.React
   italic: (c) => <em className="italic">{c}</em>,
   underline: (c) => <u className="underline">{c}</u>,
   strike: (c) => <s className="line-through">{c}</s>,
-  code: (c) => <code className="bg-muted rounded px-1 py-0.5 font-mono text-sm">{c}</code>,
+  code: (c) => (
+    <code className="rounded px-1 py-0.5 font-mono text-sm whitespace-normal bg-accent text-accent-foreground">
+      {c}
+    </code>
+  ),
 };
 
 interface InlineContentProps {
