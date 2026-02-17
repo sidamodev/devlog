@@ -2,86 +2,16 @@ import 'server-only';
 
 import type { Block } from '@blocknote/core';
 import { validateCreatePostInput } from '@/features/posts/server/create-post.schema';
-import {
-  CREATE_POST_MESSAGES,
-  type CreatePostFieldErrors,
-} from '@/features/posts/shared/create-post.rules';
+import { CREATE_POST_MESSAGES } from '@/features/posts/shared/create-post.rules';
+import { collectTextFromBlocks, countImageBlocks, getReadingTime } from '@/features/posts/shared/post-content.utils';
+import type { CreatePostResult, PostListApiResponse, PostSummaryDto } from '@/features/posts/shared/post.contracts';
 import type { PostDetail } from '@/features/posts/shared/post.types';
 import { hashids } from '@/lib/hashid';
+import { toPrismaInputJson } from '@/lib/prisma-json';
 import { createPostRecord, findOrCreateDefaultAuthor, findPostById, findPostList } from './repository';
-import type { Prisma } from '../../../../generated/prisma/client';
 
 const PAGE_SIZE = 20;
 const DESCRIPTION_MAX_LENGTH = 140;
-
-export type CreatePostInput = {
-  title: string;
-  body: unknown;
-  tags?: unknown;
-};
-
-export type CreatePostErrors = CreatePostFieldErrors;
-export type CreatePostErrorCode = 'VALIDATION_ERROR' | 'INTERNAL_ERROR';
-
-export type CreatePostSuccess =
-  | {
-      ok: true;
-      post: {
-        id: number;
-        slug: string;
-        title: string;
-        createdAt: string;
-        author: {
-          id: number;
-          username: string;
-          nickname: string;
-          avatar: string | null;
-        };
-      };
-    };
-
-export type CreatePostFailure =
-  | {
-      ok: false;
-      error: {
-        code: CreatePostErrorCode;
-        message: string;
-        fieldErrors?: CreatePostErrors;
-      };
-    };
-
-export type CreatePostResult = CreatePostSuccess | CreatePostFailure;
-
-type PostListApiRecord = {
-  id: number;
-  title: string;
-  slug: string;
-  authorId: number;
-  author: {
-    id: number;
-    username: string;
-    nickname: string;
-    avatar: string | null;
-  };
-  createdAt: string;
-  updatedAt: string;
-  thumbnail: string | null;
-  description: string;
-  likeCount: number;
-  commentCount: number;
-  bookmarkCount: number;
-  readingTime: number;
-  body: unknown;
-};
-
-type PostListApiResponse = {
-  data: PostListApiRecord[];
-  pageInfo: {
-    nextCursor?: string;
-    hasNextPage: boolean;
-    count: number;
-  };
-};
 
 /**
  * 커서 문자열(hashids)을 post id로 변환합니다.
@@ -123,14 +53,6 @@ const toSlug = (title: string): string => {
   return normalized.length > 0 ? normalized : 'post';
 };
 
-const getReadingTime = (text: string): number => {
-  const words = text.trim().split(/\s+/).filter(Boolean).length;
-  if (words === 0) return 1;
-  return Math.max(1, Math.ceil(words / 225));
-};
-
-const toInputJson = (value: unknown): Prisma.InputJsonValue => value as Prisma.InputJsonValue;
-
 /**
  * 게시글 목록 응답 DTO를 생성합니다.
  * 커서 기반 페이징을 수행하고 Date 필드를 ISO 문자열로 직렬화합니다.
@@ -145,7 +67,7 @@ export const getPostListResponse = async (rawCursor: string | null): Promise<Pos
   const hasNextPage = posts.length > PAGE_SIZE;
   const currentPage = hasNextPage ? posts.slice(0, PAGE_SIZE) : posts;
 
-  const data: PostListApiRecord[] = currentPage.map((post) => ({
+  const data: PostSummaryDto[] = currentPage.map((post) => ({
     ...post,
     slug: post.slug + '-' + hashids.encode(post.id),
     createdAt: post.createdAt.toISOString(),
@@ -200,6 +122,13 @@ export const getPostDetail = async (slug: string): Promise<PostDetail | null> =>
   });
 };
 
+/**
+ * 게시글 생성 요청을 검증하고 저장한 뒤 API 계약 형태의 결과를 반환합니다.
+ * 입력 검증 실패 시 `VALIDATION_ERROR`, 처리 중 예외 발생 시 `INTERNAL_ERROR`를 반환합니다.
+ *
+ * @param input - 클라이언트/액션 계층에서 전달된 게시글 생성 원본 입력값
+ * @returns 생성 성공 시 게시글 메타 정보, 실패 시 에러 코드/메시지를 포함한 결과
+ */
 export const createPost = async (input: unknown): Promise<CreatePostResult> => {
   try {
     const validated = validateCreatePostInput(input);
@@ -214,15 +143,18 @@ export const createPost = async (input: unknown): Promise<CreatePostResult> => {
       };
     }
 
-    const { title, body, plainText } = validated.data;
+    const { title, body } = validated.data;
+    const plainText = collectTextFromBlocks(body);
     const author = await findOrCreateDefaultAuthor();
+    const imageCount = countImageBlocks(body);
+    const sanitizedBody = toPrismaInputJson(body);
     const created = await createPostRecord({
       authorId: author.id,
       slug: toSlug(title),
       title,
       description: plainText.slice(0, DESCRIPTION_MAX_LENGTH),
-      body: toInputJson(body),
-      readingTime: getReadingTime(plainText),
+      body: sanitizedBody,
+      readingTime: getReadingTime(plainText, imageCount),
     });
 
     return {

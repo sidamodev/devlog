@@ -1,11 +1,11 @@
 'use server';
 
-import {
-  createPost,
-  type CreatePostFailure,
-  type CreatePostInput,
-  type CreatePostSuccess,
-} from '@/features/posts/server/service';
+import type {
+  CreatePostFailure,
+  CreatePostInput,
+  CreatePostSuccess,
+} from '@/features/posts/shared/post.contracts';
+import { createPost } from '@/features/posts/server/service';
 
 export type CreatePostActionResult = CreatePostSuccess | CreatePostFailure;
 

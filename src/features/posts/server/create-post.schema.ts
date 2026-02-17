@@ -8,6 +8,7 @@ import {
   TITLE_MAX_LENGTH,
   type CreatePostFieldErrors,
 } from '@/features/posts/shared/create-post.rules';
+import { collectTextFromBlocks } from '@/features/posts/shared/post-content.utils';
 import { z } from 'zod';
 
 const titleSchema = z
@@ -55,44 +56,6 @@ const createPostEnvelopeSchema = z.preprocess(
   }),
 );
 
-const collectTextFromInline = (content: unknown): string => {
-  if (typeof content === 'string') {
-    return content;
-  }
-
-  if (!Array.isArray(content)) {
-    return '';
-  }
-
-  return content
-    .map((item) => {
-      if (typeof item === 'string') return item;
-      if (item && typeof item === 'object' && 'text' in item) {
-        const text = (item as { text?: unknown }).text;
-        return typeof text === 'string' ? text : '';
-      }
-      return '';
-    })
-    .join(' ');
-};
-
-const collectTextFromBlocks = (blocks: Block[]): string => {
-  return blocks
-    .map((block) => {
-      const currentText = collectTextFromInline((block as { content?: unknown }).content);
-      const children = (block as { children?: unknown }).children;
-
-      if (Array.isArray(children) && children.length > 0) {
-        return [currentText, collectTextFromBlocks(children as Block[])].join(' ');
-      }
-
-      return currentText;
-    })
-    .join(' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-};
-
 const addFieldError = (
   fieldErrors: CreatePostFieldErrors,
   field: keyof CreatePostFieldErrors,
@@ -120,7 +83,6 @@ export type ValidatedCreatePostInput = {
   title: string;
   body: Block[];
   tags: string[];
-  plainText: string;
 };
 
 export type ValidateCreatePostInputResult =
@@ -140,7 +102,6 @@ export const validateCreatePostInput = (input: unknown): ValidateCreatePostInput
   let title = '';
   let body: Block[] = [];
   let tags: string[] = [];
-  let plainText = '';
 
   const titleResult = titleSchema.safeParse(envelope.title);
   if (titleResult.success) {
@@ -152,8 +113,7 @@ export const validateCreatePostInput = (input: unknown): ValidateCreatePostInput
   const bodyResult = bodySchema.safeParse(envelope.body);
   if (bodyResult.success) {
     body = bodyResult.data as Block[];
-    plainText = collectTextFromBlocks(body);
-    if (!plainText) {
+    if (!collectTextFromBlocks(body)) {
       addFieldError(fieldErrors, 'body', CREATE_POST_MESSAGES.bodyRequired);
     }
   } else {
@@ -180,7 +140,6 @@ export const validateCreatePostInput = (input: unknown): ValidateCreatePostInput
       title,
       body,
       tags,
-      plainText,
     },
   };
 };
