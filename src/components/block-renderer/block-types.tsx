@@ -153,7 +153,6 @@ export function TableBlock({ block }: { block: BlockOf<'table'> }) {
 // Media Blocks
 // ============================================================
 const DEFAULT_IMAGE_WIDTH = 1024;
-const DEFAULT_IMAGE_HEIGHT = 768;
 
 export function ImageBlock({ block }: { block: BlockOf<'image'> }) {
   const url = block.props.url;
@@ -163,14 +162,14 @@ export function ImageBlock({ block }: { block: BlockOf<'image'> }) {
   const width = block.props.previewWidth ?? DEFAULT_IMAGE_WIDTH;
 
   return (
-    <figure>
+    <figure className="max-w-full">
       <Image
         src={url}
         alt={caption ?? 'Post image'}
-        className="w-full object-cover aspect-2/1"
+        className="h-auto max-w-full object-contain"
         width={width}
-        height={DEFAULT_IMAGE_HEIGHT}
-        loading="eager"
+        height={width}
+        loading='eager'
       />
       {caption && <figcaption className="text-center text-sm">{caption}</figcaption>}
     </figure>
