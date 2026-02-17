@@ -9,12 +9,14 @@ import {
   TITLE_MAX_LENGTH,
   type CreatePostFieldErrors,
 } from '@/features/posts/shared/create-post.rules';
+import { collectTextFromBlocks } from '@/features/posts/shared/post-content.utils';
 import { useRouter } from 'next/navigation';
-import { useMemo, useReducer } from 'react';
+import { useMemo, useReducer, type KeyboardEvent } from 'react';
 import { toast } from 'sonner';
 
 type FormValues = {
   title: string;
+  tags: string[];
   tagInput: string;
   body: Block[];
 };
@@ -29,6 +31,9 @@ type FormState = {
 type Action =
   | { type: 'TITLE_CHANGED'; title: string }
   | { type: 'TAG_INPUT_CHANGED'; tagInput: string }
+  | { type: 'TAGS_INPUT_PARSED'; tagInput: string; tagsToAdd: string[] }
+  | { type: 'TAG_REMOVED'; tag: string }
+  | { type: 'TAG_LAST_REMOVED' }
   | { type: 'BODY_CHANGED'; body: Block[] }
   | { type: 'SET_ERRORS'; errors: CreatePostFieldErrors }
   | { type: 'SUBMIT_STARTED' }
@@ -40,65 +45,43 @@ const initialState: FormState = {
   editorKey: 0,
   values: {
     title: '',
+    tags: [],
     tagInput: '',
     body: [],
   },
   fieldErrors: {},
 };
 
-const postSuccessMessage = '게시글이 등록되었습니다. 목록으로 이동합니다.';
+const postSuccessMessage = '게시글이 등록되었습니다.';
 
-const collectTextFromInline = (content: unknown): string => {
-  if (typeof content === 'string') return content;
-  if (!Array.isArray(content)) return '';
+const appendUniqueTags = (currentTags: string[], tagsToAdd: string[]): string[] => {
+  if (tagsToAdd.length === 0) return currentTags;
 
-  return content
-    .map((item) => {
-      if (typeof item === 'string') return item;
-      if (item && typeof item === 'object' && 'text' in item) {
-        const text = (item as { text?: unknown }).text;
-        return typeof text === 'string' ? text : '';
-      }
-      return '';
-    })
-    .join(' ');
+  const seen = new Set(currentTags);
+  const appended = [...currentTags];
+
+  for (const tag of tagsToAdd) {
+    if (appended.length >= TAG_MAX_COUNT) break;
+    const trimmed = tag.trim();
+    if (!trimmed || seen.has(trimmed)) continue;
+    seen.add(trimmed);
+    appended.push(trimmed);
+  }
+
+  return appended;
 };
 
-const collectTextFromBlocks = (blocks: Block[]): string => {
-  return blocks
-    .map((block) => {
-      const currentText = collectTextFromInline((block as { content?: unknown }).content);
-      const children = (block as { children?: unknown }).children;
-
-      if (Array.isArray(children) && children.length > 0) {
-        return [currentText, collectTextFromBlocks(children as Block[])].join(' ');
-      }
-
-      return currentText;
-    })
-    .join(' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-};
-
-const parseTags = (value: string): string[] => {
-  if (!value.trim()) return [];
-
-  return Array.from(
-    new Set(
-      value
-        .split(',')
-        .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0),
-    ),
-  );
+const getTagsWithPendingInput = (values: FormValues): string[] => {
+  const pending = values.tagInput.trim();
+  if (!pending) return values.tags;
+  return appendUniqueTags(values.tags, [pending]);
 };
 
 const validateClientValues = (values: FormValues): CreatePostFieldErrors => {
   const nextErrors: CreatePostFieldErrors = {};
   const title = values.title.trim();
   const plainText = collectTextFromBlocks(values.body);
-  const tags = parseTags(values.tagInput);
+  const tags = getTagsWithPendingInput(values);
 
   if (!title) {
     nextErrors.title = [CREATE_POST_MESSAGES.titleRequired];
@@ -120,16 +103,19 @@ const validateClientValues = (values: FormValues): CreatePostFieldErrors => {
 };
 
 const toErrorToastMessage = (fieldErrors: CreatePostFieldErrors): string => {
-  const deduped = new Set<string>();
+  const preferredOrder: (keyof CreatePostFieldErrors)[] = ['title', 'body', 'tags'];
 
-  for (const messages of Object.values(fieldErrors)) {
-    if (!messages) continue;
-    for (const message of messages) {
-      deduped.add(message);
-    }
+  for (const key of preferredOrder) {
+    const firstMessage = fieldErrors[key]?.[0];
+    if (firstMessage) return firstMessage;
   }
 
-  return Array.from(deduped).join('\n');
+  for (const messages of Object.values(fieldErrors)) {
+    const firstMessage = messages?.[0];
+    if (firstMessage) return firstMessage;
+  }
+
+  return CREATE_POST_MESSAGES.invalidInput;
 };
 
 const reducer = (state: FormState, action: Action): FormState => {
@@ -143,6 +129,31 @@ const reducer = (state: FormState, action: Action): FormState => {
       return {
         ...state,
         values: { ...state.values, tagInput: action.tagInput },
+      };
+    case 'TAGS_INPUT_PARSED':
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          tagInput: action.tagInput,
+          tags: appendUniqueTags(state.values.tags, action.tagsToAdd),
+        },
+      };
+    case 'TAG_REMOVED':
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          tags: state.values.tags.filter((tag) => tag !== action.tag),
+        },
+      };
+    case 'TAG_LAST_REMOVED':
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          tags: state.values.tags.slice(0, -1),
+        },
       };
     case 'BODY_CHANGED':
       return {
@@ -171,6 +182,7 @@ const reducer = (state: FormState, action: Action): FormState => {
         editorKey: state.editorKey + 1,
         values: {
           title: '',
+          tags: [],
           tagInput: '',
           body: [],
         },
@@ -186,13 +198,70 @@ export const usePostWriteForm = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const titleLength = useMemo(() => state.values.title.trim().length, [state.values.title]);
+  const isTagLimitReached = state.values.tags.length >= TAG_MAX_COUNT;
 
   const onTitleChange = (title: string) => {
     dispatch({ type: 'TITLE_CHANGED', title });
   };
 
   const onTagInputChange = (tagInput: string) => {
-    dispatch({ type: 'TAG_INPUT_CHANGED', tagInput });
+    if (isTagLimitReached && !state.values.tagInput) return;
+
+    const includesDelimiter = /[,\s]/.test(tagInput);
+    if (!includesDelimiter) {
+      dispatch({ type: 'TAG_INPUT_CHANGED', tagInput });
+      return;
+    }
+
+    const endsWithDelimiter = /[,\s]$/.test(tagInput);
+    const pieces = tagInput
+      .split(/[,\s]+/)
+      .map((piece) => piece.trim())
+      .filter((piece) => piece.length > 0);
+    const tagsToAdd = endsWithDelimiter ? pieces : pieces.slice(0, -1);
+    const nextInput = endsWithDelimiter ? '' : (pieces.at(-1) ?? '');
+
+    dispatch({
+      type: 'TAGS_INPUT_PARSED',
+      tagInput: nextInput,
+      tagsToAdd,
+    });
+  };
+
+  const onTagInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === ',' || event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
+      if (isTagLimitReached) return;
+      const trimmed = state.values.tagInput.trim();
+      if (!trimmed) return;
+
+      dispatch({
+        type: 'TAGS_INPUT_PARSED',
+        tagInput: '',
+        tagsToAdd: [trimmed],
+      });
+      return;
+    }
+
+    if (event.key === 'Backspace' && !state.values.tagInput && state.values.tags.length > 0) {
+      dispatch({ type: 'TAG_LAST_REMOVED' });
+    }
+  };
+
+  const onTagInputBlur = () => {
+    if (isTagLimitReached) return;
+    const trimmed = state.values.tagInput.trim();
+    if (!trimmed) return;
+
+    dispatch({
+      type: 'TAGS_INPUT_PARSED',
+      tagInput: '',
+      tagsToAdd: [trimmed],
+    });
+  };
+
+  const onTagRemove = (tag: string) => {
+    dispatch({ type: 'TAG_REMOVED', tag });
   };
 
   const onBodyChange = (body: Block[]) => {
@@ -216,7 +285,7 @@ export const usePostWriteForm = () => {
       const result = await createPostAction({
         title: state.values.title.trim(),
         body: state.values.body,
-        tags: parseTags(state.values.tagInput),
+        tags: getTagsWithPendingInput(state.values),
       });
 
       if (!result.ok) {
@@ -245,11 +314,16 @@ export const usePostWriteForm = () => {
     isSubmitting: state.isSubmitting,
     editorKey: state.editorKey,
     title: state.values.title,
+    tags: state.values.tags,
+    isTagLimitReached,
     tagInput: state.values.tagInput,
     fieldErrors: state.fieldErrors,
     titleLength,
     onTitleChange,
     onTagInputChange,
+    onTagInputKeyDown,
+    onTagInputBlur,
+    onTagRemove,
     onBodyChange,
     handleSubmit,
   };
