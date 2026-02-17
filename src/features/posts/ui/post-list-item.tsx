@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import type { PostSummary } from '@/features/posts/shared/post.types';
+import { formatDate } from '@/lib/format-date';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AiOutlineLike } from 'react-icons/ai';
@@ -18,7 +19,7 @@ const PostListItem = ({ post }: { post: PostSummary }) => {
           <span className="font-medium tracking-tight text-foreground">{post.author.nickname}</span>
         </Link>
         <span className="text-muted-foreground">·</span>
-        <time className="text-xs text-muted-foreground">{post.createdAt}</time>
+        <time className="text-xs text-muted-foreground">{formatDate(post.createdAt)}</time>
       </header>
 
       <Link href={`/@${post.author.username}/${post.slug}`} className="group" aria-label={`${post.title} 글 보기`}>
@@ -28,8 +29,8 @@ const PostListItem = ({ post }: { post: PostSummary }) => {
             <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{post.description}</p>
           </div>
 
-          <figure className="ml-2 sm:ml-4 relative h-26 w-22 shrink-0 overflow-hidden rounded-sm sm:h-30 sm:w-42 border shadow-lg">
-            {post.thumbnail ? (
+          {post.thumbnail && (
+            <figure className="ml-2 sm:ml-4 relative h-26 w-22 shrink-0 overflow-hidden rounded-sm sm:h-30 sm:w-42 border shadow-lg">
               <Image
                 src={post.thumbnail}
                 alt={post.title}
@@ -37,10 +38,8 @@ const PostListItem = ({ post }: { post: PostSummary }) => {
                 sizes="(max-width: 640px) 180px, 126px"
                 className="object-cover transition-opacity group-hover:opacity-80"
               />
-            ) : (
-              <div className="h-full w-full bg-muted" aria-hidden="true" />
-            )}
-          </figure>
+            </figure>
+          )}
         </div>
       </Link>
 

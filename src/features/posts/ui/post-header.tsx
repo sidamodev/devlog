@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import type { PostDetail } from '@/features/posts/shared/post.types';
+import { formatDate } from '@/lib/format-date';
 import { LuClock } from 'react-icons/lu';
 
 type PostHeaderProps = Omit<PostDetail, 'body'> & {
@@ -43,7 +44,7 @@ const PostHeader = ({ title, description, author, createdAt, readingTime, tags }
         <div className="flex flex-col">
           <span className="font-sans font-medium text-foreground text-sm">{author.nickname}</span>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <time dateTime={createdAt}>{createdAt}</time>
+            <time dateTime={createdAt}>{formatDate(createdAt)}</time>
             <span>·</span>
             <span className="flex items-center gap-0.5">
               <LuClock />
