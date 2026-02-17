@@ -178,15 +178,7 @@ const reducer = (state: FormState, action: Action): FormState => {
     case 'SUBMIT_SUCCEEDED':
       return {
         ...state,
-        isSubmitting: false,
-        editorKey: state.editorKey + 1,
-        values: {
-          title: '',
-          tags: [],
-          tagInput: '',
-          body: [],
-        },
-        fieldErrors: {},
+        isSubmitting: true,
       };
     default:
       return state;
@@ -297,6 +289,7 @@ export const usePostWriteForm = () => {
         } else {
           toast.error(result.error.message);
         }
+        dispatch({ type: 'SUBMIT_ENDED' });
         return;
       }
 
@@ -305,7 +298,6 @@ export const usePostWriteForm = () => {
       router.push(`/@${result.post.author.username}/${result.post.slug}`);
     } catch {
       toast.error(CREATE_POST_MESSAGES.internalError);
-    } finally {
       dispatch({ type: 'SUBMIT_ENDED' });
     }
   };
