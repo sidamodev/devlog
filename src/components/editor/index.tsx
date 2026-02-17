@@ -1,4 +1,10 @@
 'use client';
+import type { Block } from '@blocknote/core';
 import dynamic from 'next/dynamic';
-const Editor = dynamic(() => import('./core'), { ssr: false });
+
+type EditorProps = {
+  onChange?: (blocks: Block[]) => void;
+};
+
+const Editor = dynamic<EditorProps>(() => import('./core'), { ssr: false });
 export default Editor;

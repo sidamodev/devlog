@@ -1,5 +1,6 @@
 'use client';
 import getQueryClient from '@/lib/get-query-client';
+import { Toaster } from '@/components/ui/sonner';
 import MSWProvider from '@/providers/msw-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -11,6 +12,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
+          <Toaster />
         </ThemeProvider>
       </QueryClientProvider>
     </MSWProvider>

@@ -1,7 +1,7 @@
 'use client';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { postKeys } from '../api/keys';
-import { getPostList } from '../api/post-list-service';
+import { getPostList } from './post-list.api';
+import { postKeys } from './post-query-keys';
 
 export const useInfinitePostList = () => {
   return useInfiniteQuery({

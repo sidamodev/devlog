@@ -1,12 +1,17 @@
 import 'server-only';
 
 import type { Block } from '@blocknote/core';
-import type { PostListApiResponse, PostSummaryDto } from '@/features/posts/api/dto';
-import type { PostDetail } from '@/features/posts/model/types';
+import { validateCreatePostInput } from '@/features/posts/server/create-post.schema';
+import { CREATE_POST_MESSAGES } from '@/features/posts/shared/create-post.rules';
+import { collectTextFromBlocks, countImageBlocks, getReadingTime } from '@/features/posts/shared/post-content.utils';
+import type { CreatePostResult, PostListApiResponse, PostSummaryDto } from '@/features/posts/shared/post.contracts';
+import type { PostDetail } from '@/features/posts/shared/post.types';
 import { hashids } from '@/lib/hashid';
-import { findPostById, findPostList } from './repository';
+import { toPrismaInputJson } from '@/lib/prisma-json';
+import { createPostRecord, findOrCreateDefaultAuthor, findPostById, findPostList } from './repository';
 
 const PAGE_SIZE = 20;
+const DESCRIPTION_MAX_LENGTH = 140;
 
 /**
  * 커서 문자열(hashids)을 post id로 변환합니다.
@@ -35,6 +40,18 @@ const decodeCursor = (cursor: string | null): number | undefined => {
  * @returns hashids로 인코딩된 커서 문자열
  */
 const encodeCursor = (id: number): string => hashids.encode(id);
+
+const toSlug = (title: string): string => {
+  const normalized = title
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\p{L}\p{N}-]/gu, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+
+  return normalized.length > 0 ? normalized : 'post';
+};
 
 /**
  * 게시글 목록 응답 DTO를 생성합니다.
@@ -103,4 +120,65 @@ export const getPostDetail = async (slug: string): Promise<PostDetail | null> =>
     updatedAt: post.updatedAt.toISOString(),
     body: post.body as Block[],
   });
+};
+
+/**
+ * 게시글 생성 요청을 검증하고 저장한 뒤 API 계약 형태의 결과를 반환합니다.
+ * 입력 검증 실패 시 `VALIDATION_ERROR`, 처리 중 예외 발생 시 `INTERNAL_ERROR`를 반환합니다.
+ *
+ * @param input - 클라이언트/액션 계층에서 전달된 게시글 생성 원본 입력값
+ * @returns 생성 성공 시 게시글 메타 정보, 실패 시 에러 코드/메시지를 포함한 결과
+ */
+export const createPost = async (input: unknown): Promise<CreatePostResult> => {
+  try {
+    const validated = validateCreatePostInput(input);
+    if (!validated.success) {
+      return {
+        ok: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: CREATE_POST_MESSAGES.invalidInput,
+          fieldErrors: validated.fieldErrors,
+        },
+      };
+    }
+
+    const { title, body } = validated.data;
+    const plainText = collectTextFromBlocks(body);
+    const author = await findOrCreateDefaultAuthor();
+    const imageCount = countImageBlocks(body);
+    const sanitizedBody = toPrismaInputJson(body);
+    const created = await createPostRecord({
+      authorId: author.id,
+      slug: toSlug(title),
+      title,
+      description: plainText.slice(0, DESCRIPTION_MAX_LENGTH),
+      body: sanitizedBody,
+      readingTime: getReadingTime(plainText, imageCount),
+    });
+
+    return {
+      ok: true,
+      post: {
+        id: created.id,
+        slug: `${created.slug}-${hashids.encode(created.id)}`,
+        title: created.title,
+        createdAt: created.createdAt.toISOString(),
+        author: {
+          id: created.author.id,
+          username: created.author.username,
+          nickname: created.author.nickname,
+          avatar: created.author.avatar,
+        },
+      },
+    };
+  } catch {
+    return {
+      ok: false,
+      error: {
+        code: 'INTERNAL_ERROR',
+        message: CREATE_POST_MESSAGES.internalError,
+      },
+    };
+  }
 };
