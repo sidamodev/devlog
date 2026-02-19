@@ -2,7 +2,7 @@ import Providers from '@/app/providers';
 import AppHeader from '@/components/header/app-header';
 import AppNav from '@/components/navigation/app-nav';
 import type { Metadata } from 'next';
-import { JetBrains_Mono } from 'next/font/google';
+import { Fira_Code } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css';
 
@@ -13,9 +13,10 @@ const pretendard = localFont({
   variable: '--font-pretendard',
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const firaCode = Fira_Code({
   subsets: ['latin'],
-  variable: '--font-jetbrains-mono',
+  variable: '--font-fira-code',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -31,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${pretendard.variable} ${jetbrainsMono.variable} font-sans antialiased bg-accent/60 dark:bg-background`}
+        className={`${pretendard.variable} ${firaCode.variable} font-sans antialiased bg-accent/60 dark:bg-background`}
       >
         <Providers>
           <div className="min-h-screen">
