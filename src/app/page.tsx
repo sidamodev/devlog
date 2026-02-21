@@ -12,7 +12,7 @@ const MainPage = async () => {
     initialPageParam: undefined,
   });
   return (
-    <section aria-label="Posts" className="w-full max-w-md sm:max-w-2xl">
+    <section aria-label="Posts" className="w-full sm:max-w-3xl">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <PostList />
       </HydrationBoundary>
