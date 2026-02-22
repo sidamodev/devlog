@@ -19,7 +19,7 @@ const AppNav = () => {
         <NavButton to="/stats" active={segment === 'stats'} Icon={LuChartLine} />
         <NavButton to="/profile/user" active={segment === 'profile'} Icon={LuUser} />
       </div>
-      <div className="hidden sm:block h-16"></div>
+      <div className="hidden sm:block h-16" /> 
     </nav>
   );
 };
