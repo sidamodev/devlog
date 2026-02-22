@@ -3,7 +3,12 @@ import 'server-only';
 import type { Block } from '@blocknote/core';
 import { validateCreatePostInput } from '@/features/posts/server/create-post.schema';
 import { CREATE_POST_MESSAGES } from '@/features/posts/shared/create-post.rules';
-import { collectTextFromBlocks, countImageBlocks, getReadingTime } from '@/features/posts/shared/post-content.utils';
+import {
+  buildPostDescriptionFromBlocks,
+  collectTextFromBlocks,
+  countImageBlocks,
+  getReadingTime,
+} from '@/features/posts/shared/post-content.utils';
 import type { CreatePostResult, PostListApiResponse, PostSummaryDto } from '@/features/posts/shared/post.contracts';
 import type { PostDetail } from '@/features/posts/shared/post.types';
 import { hashids } from '@/lib/hashid';
@@ -11,7 +16,7 @@ import { toPrismaInputJson } from '@/lib/prisma-json';
 import { createPostRecord, findOrCreateDefaultAuthor, findPostById, findPostList } from './repository';
 
 const PAGE_SIZE = 20;
-const DESCRIPTION_MAX_LENGTH = 140;
+const DESCRIPTION_MAX_LENGTH = 160;
 
 /**
  * 커서 문자열(hashids)을 post id로 변환합니다.
@@ -145,6 +150,7 @@ export const createPost = async (input: unknown): Promise<CreatePostResult> => {
 
     const { title, body } = validated.data;
     const plainText = collectTextFromBlocks(body);
+    const description = buildPostDescriptionFromBlocks(body, DESCRIPTION_MAX_LENGTH);
     const author = await findOrCreateDefaultAuthor();
     const imageCount = countImageBlocks(body);
     const sanitizedBody = toPrismaInputJson(body);
@@ -152,7 +158,7 @@ export const createPost = async (input: unknown): Promise<CreatePostResult> => {
       authorId: author.id,
       slug: toSlug(title),
       title,
-      description: plainText.slice(0, DESCRIPTION_MAX_LENGTH),
+      description,
       body: sanitizedBody,
       readingTime: getReadingTime(plainText, imageCount),
     });
