@@ -34,11 +34,11 @@ export async function CodeBlock({ code, language = 'text' }: HighlightedCodeProp
       <CopyButton className="absolute right-2 top-2 z-1" code={code} />
 
       <div
-        className="code-scroll-area overflow-x-auto pt-2 pb-1 text-xs dark:hidden sm:text-sm"
+        className="code-scroll-area overflow-x-auto py-2 text-xs dark:hidden sm:text-sm"
         dangerouslySetInnerHTML={{ __html: lightHtml }}
       />
       <div
-        className="code-scroll-area hidden overflow-x-auto pt-2 pb-1 text-xs dark:block sm:text-sm"
+        className="code-scroll-area hidden overflow-x-auto py-2 text-xs dark:block sm:text-sm"
         dangerouslySetInnerHTML={{ __html: darkHtml }}
       />
 
