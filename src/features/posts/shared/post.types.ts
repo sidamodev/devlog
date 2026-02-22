@@ -27,5 +27,6 @@ export type PostListResponse = PaginatedResponse<PostSummary>;
 
 export type PostDetail = PostSummary & {
   body: Block[];
+  readingTime: number;
   relatedPosts?: PostSummary[];
 };
