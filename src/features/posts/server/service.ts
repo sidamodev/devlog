@@ -15,7 +15,7 @@ import { hashids } from '@/lib/hashid';
 import { toPrismaInputJson } from '@/lib/prisma-json';
 import { createPostRecord, findOrCreateDefaultAuthor, findPostById, findPostList } from './repository';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 10;
 const DESCRIPTION_MAX_LENGTH = 160;
 
 /**
@@ -24,7 +24,7 @@ const DESCRIPTION_MAX_LENGTH = 160;
  * @param cursor - 클라이언트가 전달한 커서 문자열
  * @returns 유효한 경우 post id, 아니면 `undefined`
  */
-const decodeCursor = (cursor: string | null): number | undefined => {
+const decodeCursor = (cursor?: string | null): number | undefined => {
   if (!cursor) return undefined;
 
   try {
@@ -65,7 +65,7 @@ const toSlug = (title: string): string => {
  * @param rawCursor - 요청 쿼리에서 받은 원본 커서 문자열
  * @returns 목록 데이터와 페이지 정보를 포함한 API 응답
  */
-export const getPostListResponse = async (rawCursor: string | null): Promise<PostListApiResponse> => {
+export const getPostListResponse = async (rawCursor?: string): Promise<PostListApiResponse> => {
   const cursor = decodeCursor(rawCursor);
   const posts = await findPostList(cursor, PAGE_SIZE);
 

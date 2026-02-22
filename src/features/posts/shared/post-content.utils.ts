@@ -54,7 +54,7 @@ const getIncludeBlockTypeSet = (includeBlockTypes: CollectTextFromBlocksOptions[
   }
 
   return new Set(includeBlockTypes);
-  };
+};
 
 const collectTextFromBlocksInternal = (blocks: Block[], includeBlockTypes: Set<Block['type']> | undefined): string => {
   return blocks
@@ -76,24 +76,6 @@ const collectTextFromBlocksInternal = (blocks: Block[], includeBlockTypes: Set<B
       return currentText;
     })
     .join(' ');
-};
-
-export const collectTextFromBlocks = (blocks: Block[], options: CollectTextFromBlocksOptions = {}): string => {
-  const includeBlockTypeSet = getIncludeBlockTypeSet(options.includeBlockTypes);
-  const collectedText = collectTextFromBlocksInternal(blocks, includeBlockTypeSet);
-
-  return normalizeWhitespace(collectedText);
-};
-
-export const countImageBlocks = (blocks: Block[]): number => {
-  return blocks.reduce((count, block) => {
-    const type = (block as { type?: unknown }).type;
-    const current = type === 'image' ? 1 : 0;
-    const children = (block as { children?: unknown }).children;
-    const nested = Array.isArray(children) ? countImageBlocks(children as Block[]) : 0;
-
-    return count + current + nested;
-  }, 0);
 };
 
 const getPositiveOrDefault = (value: number | undefined, fallback: number): number => {
@@ -152,6 +134,24 @@ const truncateTextAtWordBoundary = (text: string, maxLength: number): string => 
   }
 
   return sliceByGrapheme(text, maxLength);
+};
+
+export const collectTextFromBlocks = (blocks: Block[], options: CollectTextFromBlocksOptions = {}): string => {
+  const includeBlockTypeSet = getIncludeBlockTypeSet(options.includeBlockTypes);
+  const collectedText = collectTextFromBlocksInternal(blocks, includeBlockTypeSet);
+
+  return normalizeWhitespace(collectedText);
+};
+
+export const countImageBlocks = (blocks: Block[]): number => {
+  return blocks.reduce((count, block) => {
+    const type = (block as { type?: unknown }).type;
+    const current = type === 'image' ? 1 : 0;
+    const children = (block as { children?: unknown }).children;
+    const nested = Array.isArray(children) ? countImageBlocks(children as Block[]) : 0;
+
+    return count + current + nested;
+  }, 0);
 };
 
 export const buildPostDescriptionFromBlocks = (blocks: Block[], maxLength = DEFAULT_DESCRIPTION_MAX_LENGTH): string => {

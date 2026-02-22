@@ -3,7 +3,7 @@ import 'server-only';
 import { prisma } from '@/lib/prisma';
 import type { Prisma } from '../../../../generated/prisma/client';
 
-const postInclude = {
+const authorInclude = {
   author: {
     select: {
       id: true,
@@ -19,14 +19,27 @@ export const findPostList = async (cursor: number | undefined, pageSize: number)
     take: pageSize + 1,
     ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
     orderBy: [{ id: 'desc' }],
-    include: postInclude,
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      ...authorInclude,
+      authorId: true,
+      createdAt: true,
+      updatedAt: true,
+      thumbnail: true,
+      description: true,
+      likeCount: true,
+      commentCount: true,
+      bookmarkCount: true,
+    },
   });
 };
 
 export const findPostById = async (id: number) => {
   return prisma.post.findUnique({
     where: { id },
-    include: postInclude,
+    include: authorInclude,
   });
 };
 
@@ -70,6 +83,6 @@ export const createPostRecord = async (input: CreatePostRecordInput) => {
       readingTime: input.readingTime,
       thumbnail: null,
     },
-    include: postInclude,
+    include: authorInclude,
   });
 };

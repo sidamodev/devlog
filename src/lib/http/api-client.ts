@@ -182,10 +182,27 @@ class ApiClient {
   }
 }
 
+const getBaseURL = () => {
+  if(typeof window !== 'undefined') {
+    return '/api';
+  }
+
+  if(process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+
+  if(process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api`;
+  }
+  
+  return 'http://localhost:3000/api';
+}
+
 /**
  * 기본 설정이 적용된 API 클라이언트 인스턴스입니다.
  * 환경 변수에서 API URL을 가져오며, 기본 Content-Type은 application/json입니다.
  */
-export const api = new ApiClient(process.env.NEXT_PUBLIC_API_URL as string, {
+export const api = new ApiClient(getBaseURL(), {
   'Content-Type': 'application/json',
 });
+

@@ -21,8 +21,6 @@ export type PostSummary = {
   likeCount: number;
   commentCount: number;
   bookmarkCount: number;
-  readingTime: number;
-  body: unknown;
 };
 
 export type PostListResponse = PaginatedResponse<PostSummary>;
