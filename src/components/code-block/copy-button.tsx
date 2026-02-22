@@ -2,12 +2,14 @@
 
 import { useState } from 'react';
 import { Check, Copy } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface CopyButtonProps {
   code: string;
+  className?: string;
 }
 
-export function CopyButton({ code }: CopyButtonProps) {
+export function CopyButton({ code, className }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async () => {
@@ -19,7 +21,10 @@ export function CopyButton({ code }: CopyButtonProps) {
   return (
     <button
       onClick={copyToClipboard}
-      className="flex items-center w-12 gap-1.5 text-xs text-[#6b7280] hover:text-[#abb2bf] transition-colors"
+      className={cn(
+        'flex items-center w-12 gap-1.5 text-xs text-[#6b7280] hover:text-[#abb2bf] transition-colors',
+        className,
+      )}
       aria-label="Copy code"
     >
       {copied ? (
