@@ -99,14 +99,29 @@ export const getPostListResponse = async (rawCursor?: string): Promise<PostListA
  * @returns 조회 성공 시 상세 데이터, 실패 시 `null`
  */
 export const getPostDetail = async (slug: string): Promise<PostDetail | null> => {
+  if (!slug || typeof slug !== 'string') {
+    return Promise.resolve(null);
+  }
+
   const hashPart = slug.split('-').pop();
   if (!hashPart) {
     return Promise.resolve(null);
   }
 
-  const decoded = hashids.decode(hashPart);
-  const postId = decoded[0];
-  if (postId === undefined || typeof postId !== 'number') {
+  let postId: number | undefined;
+  try {
+    const decoded = hashids.decode(hashPart);
+    const raw = decoded[0];
+    const id = typeof raw === 'bigint' ? Number(raw) : typeof raw === 'number' ? raw : Number(raw);
+    if (!Number.isInteger(id) || id <= 0) {
+      return Promise.resolve(null);
+    }
+    postId = id;
+  } catch {
+    return Promise.resolve(null);
+  }
+
+  if (postId === undefined) {
     return Promise.resolve(null);
   }
 

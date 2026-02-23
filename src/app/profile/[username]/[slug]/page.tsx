@@ -8,8 +8,8 @@ import { notFound } from 'next/navigation';
 
 export const revalidate = false;
 
-const PostDetailPage = async ({ params }: { params: { username: string; slug: string } }) => {
-  const { slug } = params;
+const PostDetailPage = async ({ params }: { params: Promise<{ username: string; slug: string }> }) => {
+  const { slug } = await params;
   const post = await getPostDetail(slug);
   if (!post) {
     notFound();
