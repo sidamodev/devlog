@@ -6,19 +6,22 @@ import PostHeader from '@/features/posts/ui/post-header';
 import PostProgressBar from '@/features/posts/ui/post-progress-bar';
 import { notFound } from 'next/navigation';
 
-const PostDetailPage = async ({ params }: { params: Promise<{ username: string; slug: string }> }) => {
-  const { slug } = await params;
+export const revalidate = false;
+
+const PostDetailPage = async ({ params }: { params: { username: string; slug: string } }) => {
+  const { slug } = params;
   const post = await getPostDetail(slug);
   if (!post) {
     notFound();
   }
+  const { body, ...headerProps } = post;
 
   return (
     <article className="mx-0 flex w-full min-w-0 flex-col md:max-w-3xl">
       <PostProgressBar />
-      <PostHeader {...post} />
+      <PostHeader {...headerProps} />
       <PostContent>
-        <BlockRenderer blocks={post.body} />
+        <BlockRenderer blocks={body} />
       </PostContent>
       <PostFooter />
     </article>
