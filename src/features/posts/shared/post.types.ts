@@ -26,6 +26,7 @@ export type PostSummary = {
 export type PostListResponse = PaginatedResponse<PostSummary>;
 
 export type PostDetail = PostSummary & {
+  isGeneratedDescription: boolean;
   body: Block[];
   readingTime: number;
   relatedPosts?: PostSummary[];
