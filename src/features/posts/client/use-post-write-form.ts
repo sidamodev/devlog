@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 
 type FormValues = {
   title: string;
+  description: string;
   tags: string[];
   tagInput: string;
   body: Block[];
@@ -30,6 +31,7 @@ type FormState = {
 
 type Action =
   | { type: 'TITLE_CHANGED'; title: string }
+  | { type: 'DESCRIPTION_CHANGED'; description: string }
   | { type: 'TAG_INPUT_CHANGED'; tagInput: string }
   | { type: 'TAGS_INPUT_PARSED'; tagInput: string; tagsToAdd: string[] }
   | { type: 'TAG_REMOVED'; tag: string }
@@ -40,17 +42,28 @@ type Action =
   | { type: 'SUBMIT_ENDED' }
   | { type: 'SUBMIT_SUCCEEDED' };
 
-const initialState: FormState = {
+type UsePostWriteFormOptions = {
+  initialDescription?: string;
+  isGeneratedDescription?: boolean;
+};
+
+const resolveInitialDescription = ({ initialDescription, isGeneratedDescription }: UsePostWriteFormOptions): string => {
+  if (isGeneratedDescription !== false) return '';
+  return (initialDescription ?? '').trim();
+};
+
+const createInitialState = (options: UsePostWriteFormOptions): FormState => ({
   isSubmitting: false,
   editorKey: 0,
   values: {
     title: '',
+    description: resolveInitialDescription(options),
     tags: [],
     tagInput: '',
     body: [],
   },
   fieldErrors: {},
-};
+});
 
 const postSuccessMessage = '게시글이 등록되었습니다.';
 
@@ -125,6 +138,11 @@ const reducer = (state: FormState, action: Action): FormState => {
         ...state,
         values: { ...state.values, title: action.title },
       };
+    case 'DESCRIPTION_CHANGED':
+      return {
+        ...state,
+        values: { ...state.values, description: action.description },
+      };
     case 'TAG_INPUT_CHANGED':
       return {
         ...state,
@@ -185,15 +203,19 @@ const reducer = (state: FormState, action: Action): FormState => {
   }
 };
 
-export const usePostWriteForm = () => {
+export const usePostWriteForm = (options: UsePostWriteFormOptions = {}) => {
   const router = useRouter();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, options, createInitialState);
 
   const titleLength = useMemo(() => state.values.title.trim().length, [state.values.title]);
   const isTagLimitReached = state.values.tags.length >= TAG_MAX_COUNT;
 
   const onTitleChange = (title: string) => {
     dispatch({ type: 'TITLE_CHANGED', title });
+  };
+
+  const onDescriptionChange = (description: string) => {
+    dispatch({ type: 'DESCRIPTION_CHANGED', description });
   };
 
   const onTagInputChange = (tagInput: string) => {
@@ -277,6 +299,7 @@ export const usePostWriteForm = () => {
       const result = await createPostAction({
         title: state.values.title.trim(),
         body: state.values.body,
+        description: state.values.description.trim() || undefined,
         tags: getTagsWithPendingInput(state.values),
       });
 
@@ -306,12 +329,14 @@ export const usePostWriteForm = () => {
     isSubmitting: state.isSubmitting,
     editorKey: state.editorKey,
     title: state.values.title,
+    description: state.values.description,
     tags: state.values.tags,
     isTagLimitReached,
     tagInput: state.values.tagInput,
     fieldErrors: state.fieldErrors,
     titleLength,
     onTitleChange,
+    onDescriptionChange,
     onTagInputChange,
     onTagInputKeyDown,
     onTagInputBlur,

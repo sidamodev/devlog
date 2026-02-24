@@ -12,10 +12,12 @@ export type CreatePostActionResult = CreatePostSuccess | CreatePostFailure;
 const toActionInput = (input: {
   title: string;
   body: unknown;
+  description?: string;
   tags?: string[];
 }): CreatePostInput => ({
   title: input.title,
   body: input.body,
+  description: input.description,
   tags: input.tags,
 });
 
@@ -24,6 +26,7 @@ const toActionFailure = (result: CreatePostFailure): Extract<CreatePostActionRes
 export const createPostAction = async (input: {
   title: string;
   body: unknown;
+  description?: string;
   tags?: string[];
 }): Promise<CreatePostActionResult> => {
   const result = await createPost(toActionInput(input));

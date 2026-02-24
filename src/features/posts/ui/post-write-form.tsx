@@ -10,24 +10,31 @@ import { cn } from '@/lib/utils';
 import { Tag, X } from 'lucide-react';
 import { type ChangeEvent } from 'react';
 
-const PostWriteForm = () => {
+type PostWriteFormProps = {
+  initialDescription?: string;
+  isGeneratedDescription?: boolean;
+};
+
+const PostWriteForm = ({ initialDescription, isGeneratedDescription }: PostWriteFormProps) => {
   const {
     isSubmitting,
     editorKey,
     title,
+    description,
     tags,
     isTagLimitReached,
     tagInput,
     fieldErrors,
     titleLength,
     onTitleChange,
+    onDescriptionChange,
     onTagInputChange,
     onTagInputKeyDown,
     onTagInputBlur,
     onTagRemove,
     onBodyChange,
     handleSubmit,
-  } = usePostWriteForm();
+  } = usePostWriteForm({ initialDescription, isGeneratedDescription });
 
   const handleTitleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = event.currentTarget;
@@ -85,6 +92,20 @@ const PostWriteForm = () => {
         >
           {titleLength}/{TITLE_MAX_LENGTH}
         </p>
+      </section>
+
+      <section aria-label="설명 입력란" className="flex flex-col gap-2">
+        <label htmlFor="description" className="sr-only">
+          설명
+        </label>
+        <input
+          id="description"
+          name="description"
+          placeholder="설명 (선택)"
+          value={description}
+          onChange={(event) => onDescriptionChange(event.target.value)}
+          className="w-full border-none bg-transparent px-0 py-1 text-sm text-muted-foreground outline-none placeholder:text-muted-foreground"
+        />
       </section>
 
       <section aria-label="태그 입력란" className="flex flex-col gap-2">

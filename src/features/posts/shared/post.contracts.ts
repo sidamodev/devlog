@@ -28,6 +28,7 @@ export type PostListApiResponse = PaginatedResponse<PostSummaryDto>;
 export type CreatePostInput = {
   title: string;
   body: unknown;
+  description?: string;
   tags?: unknown;
 };
 

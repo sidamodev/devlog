@@ -33,14 +33,14 @@ const tagsSchema = z.preprocess(
   z.array(z.string()).superRefine((tags, ctx) => {
     if (tags.length > TAG_MAX_COUNT) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: CREATE_POST_MESSAGES.tagsTooMany,
       });
     }
 
     if (tags.some((tag) => tag.length > TAG_MAX_LENGTH)) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: CREATE_POST_MESSAGES.tagsTooLong,
       });
     }
@@ -52,15 +52,12 @@ const createPostEnvelopeSchema = z.preprocess(
   z.object({
     title: z.unknown().optional(),
     body: z.unknown().optional(),
+    description: z.unknown().optional(),
     tags: z.unknown().optional(),
   }),
 );
 
-const addFieldError = (
-  fieldErrors: CreatePostFieldErrors,
-  field: keyof CreatePostFieldErrors,
-  message: string,
-) => {
+const addFieldError = (fieldErrors: CreatePostFieldErrors, field: keyof CreatePostFieldErrors, message: string) => {
   const messages = fieldErrors[field] ?? [];
   if (!messages.includes(message)) {
     fieldErrors[field] = [...messages, message];
@@ -82,6 +79,7 @@ const addZodIssuesToFieldErrors = (
 export type ValidatedCreatePostInput = {
   title: string;
   body: Block[];
+  description?: string;
   tags: string[];
 };
 
@@ -101,6 +99,7 @@ export const validateCreatePostInput = (input: unknown): ValidateCreatePostInput
 
   let title = '';
   let body: Block[] = [];
+  let description: string | undefined;
   let tags: string[] = [];
 
   const titleResult = titleSchema.safeParse(envelope.title);
@@ -118,6 +117,11 @@ export const validateCreatePostInput = (input: unknown): ValidateCreatePostInput
     }
   } else {
     addFieldError(fieldErrors, 'body', CREATE_POST_MESSAGES.bodyInvalidFormat);
+  }
+
+  if (typeof envelope.description === 'string') {
+    const trimmed = envelope.description.trim();
+    description = trimmed.length > 0 ? trimmed : undefined;
   }
 
   const tagsResult = tagsSchema.safeParse(envelope.tags);
@@ -139,6 +143,7 @@ export const validateCreatePostInput = (input: unknown): ValidateCreatePostInput
     data: {
       title,
       body,
+      description,
       tags,
     },
   };

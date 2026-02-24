@@ -29,6 +29,7 @@ export const findPostList = async (cursor: number | undefined, pageSize: number)
       updatedAt: true,
       thumbnail: true,
       description: true,
+      isGeneratedDescription: true,
       likeCount: true,
       commentCount: true,
       bookmarkCount: true,
@@ -68,6 +69,7 @@ type CreatePostRecordInput = {
   slug: string;
   title: string;
   description: string;
+  isGeneratedDescription: boolean;
   body: Prisma.InputJsonValue;
   readingTime: number;
 };
@@ -79,6 +81,7 @@ export const createPostRecord = async (input: CreatePostRecordInput) => {
       slug: input.slug,
       title: input.title,
       description: input.description,
+      isGeneratedDescription: input.isGeneratedDescription,
       body: input.body,
       readingTime: input.readingTime,
       thumbnail: null,

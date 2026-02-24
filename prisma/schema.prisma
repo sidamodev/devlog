@@ -22,6 +22,7 @@ model Post {
   title       String
   thumbnail   String?
   description String
+  isGeneratedDescription Boolean @default(true)
   body        Json
   readingTime Int
 

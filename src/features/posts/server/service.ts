@@ -37,7 +37,7 @@ const decodeHashId = (hash: string): number | undefined => {
 };
 
 /** post id와 slug 텍스트로 공개용 slug 문자열을 만듭니다. */
-const buildSlug = (slug: string, id: number): string => `${slug}-${hashids.encode(id)}`;
+const toUrlSlug = (slug: string, id: number): string => `${slug}-${hashids.encode(id)}`;
 
 // ---------------------------------------------------------------------------
 // Cursor helpers
@@ -52,7 +52,7 @@ const encodeCursor = (id: number): string => hashids.encode(id);
 // Title → slug
 // ---------------------------------------------------------------------------
 
-const toSlug = (title: string): string => {
+const toBaseSlug = (title: string): string => {
   const normalized = title
     .trim()
     .toLowerCase()
@@ -82,10 +82,18 @@ export const getPostListResponse = async (rawCursor?: string): Promise<PostListA
   const page = hasNextPage ? posts.slice(0, PAGE_SIZE) : posts;
 
   const data: PostSummaryDto[] = page.map((post) => ({
-    ...post,
-    slug: buildSlug(post.slug, post.id),
+    id: post.id,
+    title: post.title,
+    slug: toUrlSlug(post.slug, post.id),
+    authorId: post.authorId,
+    author: post.author,
     createdAt: post.createdAt.toISOString(),
     updatedAt: post.updatedAt.toISOString(),
+    thumbnail: post.thumbnail,
+    description: post.isGeneratedDescription ? `${post.description}…` : post.description,
+    likeCount: post.likeCount,
+    commentCount: post.commentCount,
+    bookmarkCount: post.bookmarkCount,
   }));
 
   return {
@@ -147,14 +155,17 @@ export const createPost = async (input: unknown): Promise<CreatePostResult> => {
       };
     }
 
-    const { title, body } = validated.data;
+    const { title, body, description: userDescription } = validated.data;
+    const isGeneratedDescription = !userDescription;
+    const description = userDescription ?? buildPostDescriptionFromBlocks(body, DESCRIPTION_MAX_LENGTH);
     const author = await findOrCreateDefaultAuthor();
     const plainText = collectTextFromBlocks(body);
     const created = await createPostRecord({
       authorId: author.id,
-      slug: toSlug(title),
+      slug: toBaseSlug(title),
       title,
-      description: buildPostDescriptionFromBlocks(body, DESCRIPTION_MAX_LENGTH),
+      description,
+      isGeneratedDescription,
       body: toPrismaInputJson(body),
       readingTime: getReadingTime(plainText, countImageBlocks(body)),
     });
@@ -163,7 +174,7 @@ export const createPost = async (input: unknown): Promise<CreatePostResult> => {
       ok: true,
       post: {
         id: created.id,
-        slug: buildSlug(created.slug, created.id),
+        slug: toUrlSlug(created.slug, created.id),
         title: created.title,
         createdAt: created.createdAt.toISOString(),
         author: {
