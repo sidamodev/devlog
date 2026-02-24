@@ -1,11 +1,11 @@
 import Providers from '@/app/providers';
 import AppHeader from '@/components/header/app-header';
 import AppNav from '@/components/navigation/app-nav';
+import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
 import { Fira_Code } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css';
-
 const pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
   display: 'swap',
@@ -43,6 +43,7 @@ export default function RootLayout({
             </div>
           </div>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
