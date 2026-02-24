@@ -18,33 +18,39 @@ import { createPostRecord, findOrCreateDefaultAuthor, findPostById, findPostList
 const PAGE_SIZE = 10;
 const DESCRIPTION_MAX_LENGTH = 160;
 
-/**
- * 커서 문자열(hashids)을 post id로 변환합니다.
- *
- * @param cursor - 클라이언트가 전달한 커서 문자열
- * @returns 유효한 경우 post id, 아니면 `undefined`
- */
-const decodeCursor = (cursor?: string | null): number | undefined => {
-  if (!cursor) return undefined;
+// ---------------------------------------------------------------------------
+// Slug / hashid helpers
+// ---------------------------------------------------------------------------
 
+/**
+ * hashids로 인코딩된 문자열을 양의 정수 id로 디코딩합니다.
+ * 유효하지 않은 값이면 `undefined`를 반환합니다.
+ */
+const decodeHashId = (hash: string): number | undefined => {
   try {
-    const decoded = hashids.decode(cursor);
-    const raw = decoded[0];
-    const id = typeof raw === 'bigint' ? Number(raw) : typeof raw === 'number' ? raw : Number(raw);
-    if (!Number.isInteger(id) || id <= 0) return undefined;
-    return id;
+    const [raw] = hashids.decode(hash);
+    const id = typeof raw === 'bigint' ? Number(raw) : Number(raw);
+    return Number.isInteger(id) && id > 0 ? id : undefined;
   } catch {
     return undefined;
   }
 };
 
-/**
- * post id를 다음 페이지 요청에 사용할 커서 문자열로 변환합니다.
- *
- * @param id - 게시글 id
- * @returns hashids로 인코딩된 커서 문자열
- */
+/** post id와 slug 텍스트로 공개용 slug 문자열을 만듭니다. */
+const buildSlug = (slug: string, id: number): string => `${slug}-${hashids.encode(id)}`;
+
+// ---------------------------------------------------------------------------
+// Cursor helpers
+// ---------------------------------------------------------------------------
+
+const decodeCursor = (cursor?: string | null): number | undefined =>
+  cursor ? decodeHashId(cursor) : undefined;
+
 const encodeCursor = (id: number): string => hashids.encode(id);
+
+// ---------------------------------------------------------------------------
+// Title → slug
+// ---------------------------------------------------------------------------
 
 const toSlug = (title: string): string => {
   const normalized = title
@@ -58,6 +64,10 @@ const toSlug = (title: string): string => {
   return normalized.length > 0 ? normalized : 'post';
 };
 
+// ---------------------------------------------------------------------------
+// Service functions
+// ---------------------------------------------------------------------------
+
 /**
  * 게시글 목록 응답 DTO를 생성합니다.
  * 커서 기반 페이징을 수행하고 Date 필드를 ISO 문자열로 직렬화합니다.
@@ -66,27 +76,24 @@ const toSlug = (title: string): string => {
  * @returns 목록 데이터와 페이지 정보를 포함한 API 응답
  */
 export const getPostListResponse = async (rawCursor?: string): Promise<PostListApiResponse> => {
-  const cursor = decodeCursor(rawCursor);
-  const posts = await findPostList(cursor, PAGE_SIZE);
+  const posts = await findPostList(decodeCursor(rawCursor), PAGE_SIZE);
 
   const hasNextPage = posts.length > PAGE_SIZE;
-  const currentPage = hasNextPage ? posts.slice(0, PAGE_SIZE) : posts;
+  const page = hasNextPage ? posts.slice(0, PAGE_SIZE) : posts;
 
-  const data: PostSummaryDto[] = currentPage.map((post) => ({
+  const data: PostSummaryDto[] = page.map((post) => ({
     ...post,
-    slug: post.slug + '-' + hashids.encode(post.id),
+    slug: buildSlug(post.slug, post.id),
     createdAt: post.createdAt.toISOString(),
     updatedAt: post.updatedAt.toISOString(),
   }));
 
-  const nextCursor = hasNextPage ? encodeCursor(currentPage[currentPage.length - 1].id) : undefined;
-
   return {
     data,
     pageInfo: {
-      nextCursor,
       hasNextPage,
       count: data.length,
+      nextCursor: hasNextPage ? encodeCursor(page[page.length - 1].id) : undefined,
     },
   };
 };
@@ -99,47 +106,24 @@ export const getPostListResponse = async (rawCursor?: string): Promise<PostListA
  * @returns 조회 성공 시 상세 데이터, 실패 시 `null`
  */
 export const getPostDetail = async (slug: string): Promise<PostDetail | null> => {
-  if (!slug || typeof slug !== 'string') {
-    return Promise.resolve(null);
-  }
+  if (!slug || typeof slug !== 'string') return null;
 
   const hashPart = slug.split('-').pop();
-  if (!hashPart) {
-    return Promise.resolve(null);
-  }
+  if (!hashPart) return null;
 
-  let postId: number | undefined;
-  try {
-    const decoded = hashids.decode(hashPart);
-    const raw = decoded[0];
-    const id = typeof raw === 'bigint' ? Number(raw) : typeof raw === 'number' ? raw : Number(raw);
-    if (!Number.isInteger(id) || id <= 0) {
-      return Promise.resolve(null);
-    }
-    postId = id;
-  } catch {
-    return Promise.resolve(null);
-  }
-
-  if (postId === undefined) {
-    return Promise.resolve(null);
-  }
+  const postId = decodeHashId(hashPart);
+  if (postId === undefined) return null;
 
   const post = await findPostById(postId);
-  if (!post) {
-    return Promise.resolve(null);
-  }
+  if (!post) return null;
 
-  return Promise.resolve({
+  return {
     ...post,
-    author: {
-      ...post.author,
-      avatar: post.author.avatar ?? undefined,
-    },
+    author: { ...post.author, avatar: post.author.avatar ?? undefined },
     createdAt: post.createdAt.toISOString(),
     updatedAt: post.updatedAt.toISOString(),
     body: post.body as Block[],
-  });
+  };
 };
 
 /**
@@ -164,25 +148,22 @@ export const createPost = async (input: unknown): Promise<CreatePostResult> => {
     }
 
     const { title, body } = validated.data;
-    const plainText = collectTextFromBlocks(body);
-    const description = buildPostDescriptionFromBlocks(body, DESCRIPTION_MAX_LENGTH);
     const author = await findOrCreateDefaultAuthor();
-    const imageCount = countImageBlocks(body);
-    const sanitizedBody = toPrismaInputJson(body);
+    const plainText = collectTextFromBlocks(body);
     const created = await createPostRecord({
       authorId: author.id,
       slug: toSlug(title),
       title,
-      description,
-      body: sanitizedBody,
-      readingTime: getReadingTime(plainText, imageCount),
+      description: buildPostDescriptionFromBlocks(body, DESCRIPTION_MAX_LENGTH),
+      body: toPrismaInputJson(body),
+      readingTime: getReadingTime(plainText, countImageBlocks(body)),
     });
 
     return {
       ok: true,
       post: {
         id: created.id,
-        slug: `${created.slug}-${hashids.encode(created.id)}`,
+        slug: buildSlug(created.slug, created.id),
         title: created.title,
         createdAt: created.createdAt.toISOString(),
         author: {
