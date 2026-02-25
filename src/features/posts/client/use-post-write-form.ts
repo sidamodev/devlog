@@ -4,6 +4,7 @@ import type { Block } from '@blocknote/core';
 import { createPostAction } from '@/features/posts/server/actions';
 import {
   CREATE_POST_MESSAGES,
+  DESCRIPTION_MAX_LENGTH,
   TAG_MAX_COUNT,
   TAG_MAX_LENGTH,
   TITLE_MAX_LENGTH,
@@ -106,6 +107,10 @@ const validateClientValues = (values: FormValues): CreatePostFieldErrors => {
     nextErrors.body = [CREATE_POST_MESSAGES.bodyRequired];
   }
 
+  if (values.description.trim().length > DESCRIPTION_MAX_LENGTH) {
+    nextErrors.description = [CREATE_POST_MESSAGES.descriptionTooLong];
+  }
+
   if (tags.length > TAG_MAX_COUNT) {
     nextErrors.tags = [CREATE_POST_MESSAGES.tagsTooMany];
   } else if (tags.some((tag) => tag.length > TAG_MAX_LENGTH)) {
@@ -116,7 +121,7 @@ const validateClientValues = (values: FormValues): CreatePostFieldErrors => {
 };
 
 const toErrorToastMessage = (fieldErrors: CreatePostFieldErrors): string => {
-  const preferredOrder: (keyof CreatePostFieldErrors)[] = ['title', 'body', 'tags'];
+  const preferredOrder: (keyof CreatePostFieldErrors)[] = ['title', 'description', 'body', 'tags'];
 
   for (const key of preferredOrder) {
     const firstMessage = fieldErrors[key]?.[0];

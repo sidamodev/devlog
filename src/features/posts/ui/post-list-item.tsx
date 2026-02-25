@@ -24,9 +24,9 @@ const PostListItem = ({ post }: { post: PostSummary }) => {
 
       <Link href={`/@${post.author.username}/${post.slug}`} className="group" aria-label={`${post.title} 글 보기`}>
         <div className="flex mt-1">
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <h2 className="sm:text-lg font-bold group-hover:underline">{post.title}</h2>
-            <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{post.description}</p>
+            <p className="mt-2 line-clamp-3 text-sm wrap-break-word text-muted-foreground ">{post.description}</p>
           </div>
 
           {post.thumbnail && (

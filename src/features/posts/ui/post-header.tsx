@@ -8,7 +8,15 @@ type PostHeaderProps = Omit<PostDetail, 'body'> & {
   tags?: string[];
 };
 
-const PostHeader = ({ title, description, isGeneratedDescription, author, createdAt, readingTime, tags }: PostHeaderProps) => {
+const PostHeader = ({
+  title,
+  description,
+  isGeneratedDescription,
+  author,
+  createdAt,
+  readingTime,
+  tags,
+}: PostHeaderProps) => {
   return (
     <header className="mb-8">
       {/* Tags */}
@@ -31,9 +39,8 @@ const PostHeader = ({ title, description, isGeneratedDescription, author, create
         {title}
       </h1>
 
-      {/*  */}
-      {!isGeneratedDescription && description && (
-        <p className="sm:text-lg text-muted-foreground leading-relaxed mb-4">{description}</p>
+      {!isGeneratedDescription && (
+        <p className="sm:text-lg text-muted-foreground mb-4 wrap-break-word">{description}</p>
       )}
 
       {/* Author Info */}

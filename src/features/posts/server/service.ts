@@ -2,7 +2,7 @@ import 'server-only';
 
 import type { Block } from '@blocknote/core';
 import { validateCreatePostInput } from '@/features/posts/server/create-post.schema';
-import { CREATE_POST_MESSAGES } from '@/features/posts/shared/create-post.rules';
+import { CREATE_POST_MESSAGES, DESCRIPTION_MAX_LENGTH } from '@/features/posts/shared/create-post.rules';
 import {
   buildPostDescriptionFromBlocks,
   collectTextFromBlocks,
@@ -16,7 +16,6 @@ import { toPrismaInputJson } from '@/lib/prisma-json';
 import { createPostRecord, findOrCreateDefaultAuthor, findPostById, findPostList } from './repository';
 
 const PAGE_SIZE = 10;
-const DESCRIPTION_MAX_LENGTH = 160;
 
 // ---------------------------------------------------------------------------
 // Slug / hashid helpers

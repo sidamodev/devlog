@@ -3,6 +3,7 @@ import 'server-only';
 import type { Block } from '@blocknote/core';
 import {
   CREATE_POST_MESSAGES,
+  DESCRIPTION_MAX_LENGTH,
   TAG_MAX_COUNT,
   TAG_MAX_LENGTH,
   TITLE_MAX_LENGTH,
@@ -18,6 +19,12 @@ const titleSchema = z
   .max(TITLE_MAX_LENGTH, { message: CREATE_POST_MESSAGES.titleTooLong });
 
 const bodySchema = z.array(z.object({}).passthrough());
+
+const descriptionSchema = z
+  .string()
+  .trim()
+  .max(DESCRIPTION_MAX_LENGTH, { message: CREATE_POST_MESSAGES.descriptionTooLong })
+  .transform((value) => (value.length > 0 ? value : undefined));
 
 const tagsSchema = z.preprocess(
   (value) => {
@@ -119,9 +126,13 @@ export const validateCreatePostInput = (input: unknown): ValidateCreatePostInput
     addFieldError(fieldErrors, 'body', CREATE_POST_MESSAGES.bodyInvalidFormat);
   }
 
-  if (typeof envelope.description === 'string') {
-    const trimmed = envelope.description.trim();
-    description = trimmed.length > 0 ? trimmed : undefined;
+  if (envelope.description !== undefined) {
+    const descriptionResult = descriptionSchema.safeParse(envelope.description);
+    if (descriptionResult.success) {
+      description = descriptionResult.data;
+    } else {
+      addZodIssuesToFieldErrors(fieldErrors, 'description', descriptionResult.error.issues);
+    }
   }
 
   const tagsResult = tagsSchema.safeParse(envelope.tags);

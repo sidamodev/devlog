@@ -4,7 +4,7 @@ import Editor from '@/components/editor';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { TAG_MAX_COUNT, TITLE_MAX_LENGTH } from '@/features/posts/shared/create-post.rules';
+import { DESCRIPTION_MAX_LENGTH, TAG_MAX_COUNT, TITLE_MAX_LENGTH } from '@/features/posts/shared/create-post.rules';
 import { usePostWriteForm } from '@/features/posts/client/use-post-write-form';
 import { cn } from '@/lib/utils';
 import { Tag, X } from 'lucide-react';
@@ -36,11 +36,12 @@ const PostWriteForm = ({ initialDescription, isGeneratedDescription }: PostWrite
     handleSubmit,
   } = usePostWriteForm({ initialDescription, isGeneratedDescription });
 
-  const handleTitleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = event.currentTarget;
+  // Textarea의 높이를 내용에 맞게 자동으로 조절하는 핸들러
+  const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>, onChange: (value: string) => void) => {
+    const textarea = e.currentTarget;
     textarea.style.height = '0px';
     textarea.style.height = `${textarea.scrollHeight}px`;
-    onTitleChange(textarea.value);
+    onChange(textarea.value);
   };
 
   const renderTagChip = (tag: string) => (
@@ -54,7 +55,7 @@ const PostWriteForm = ({ initialDescription, isGeneratedDescription }: PostWrite
           onTagRemove(tag);
         }
       }}
-      className="bg-muted text-foreground hover:bg-muted/80 focus-visible:ring-ring/50 inline-flex items-center cursor-pointer select-none rounded-full border border-border px-2 py-1 text-xs font-medium max-w-[200px] focus-visible:outline-none focus-visible:ring-[3px]"
+      className="bg-muted text-foreground hover:bg-muted/80 focus-visible:ring-ring/50 inline-flex items-center cursor-pointer select-none rounded-full border border-border px-2 py-1 text-xs font-medium max-w-50 focus-visible:outline-none focus-visible:ring-[3px]"
       aria-label={`${tag} 태그 삭제`}
     >
       <span className="truncate">{tag}</span>
@@ -78,7 +79,7 @@ const PostWriteForm = ({ initialDescription, isGeneratedDescription }: PostWrite
           name="title"
           placeholder="제목"
           value={title}
-          onChange={handleTitleChange}
+          onChange={(e) => handleTextareaChange(e, onTitleChange)}
           maxLength={TITLE_MAX_LENGTH}
           rows={1}
           aria-invalid={Boolean(fieldErrors.title?.length)}
@@ -86,7 +87,7 @@ const PostWriteForm = ({ initialDescription, isGeneratedDescription }: PostWrite
         />
         <p
           className={cn(
-            'text-xs absolute right-2 bottom-2',
+            'text-xs absolute right-2 -bottom-2',
             titleLength >= TITLE_MAX_LENGTH ? 'text-red-500' : 'text-muted-foreground',
           )}
         >
@@ -94,18 +95,29 @@ const PostWriteForm = ({ initialDescription, isGeneratedDescription }: PostWrite
         </p>
       </section>
 
-      <section aria-label="설명 입력란" className="flex flex-col gap-2">
+      <section aria-label="설명 입력란" className="flex flex-col gap-2 relative">
         <label htmlFor="description" className="sr-only">
           설명
         </label>
-        <input
+        <textarea
           id="description"
           name="description"
           placeholder="설명 (선택)"
           value={description}
-          onChange={(event) => onDescriptionChange(event.target.value)}
-          className="w-full border-none bg-transparent px-0 py-1 text-sm text-muted-foreground outline-none placeholder:text-muted-foreground"
+          onChange={(e) => handleTextareaChange(e, onDescriptionChange)}
+          maxLength={DESCRIPTION_MAX_LENGTH}
+          rows={1}
+          aria-invalid={Boolean(fieldErrors.description?.length)}
+          className="w-full resize-none border-none bg-transparent px-0 py-1 text-sm text-muted-foreground outline-none placeholder:text-muted-foreground"
         />
+        <p
+          className={cn(
+            'text-xs absolute right-2 -bottom-2',
+            description.length >= DESCRIPTION_MAX_LENGTH ? 'text-red-500' : 'text-muted-foreground',
+          )}
+        >
+          {description.length}/{DESCRIPTION_MAX_LENGTH}
+        </p>
       </section>
 
       <section aria-label="태그 입력란" className="flex flex-col gap-2">
@@ -139,7 +151,7 @@ const PostWriteForm = ({ initialDescription, isGeneratedDescription }: PostWrite
                   : ''
             }
             value={tagInput}
-            onChange={(event) => onTagInputChange(event.target.value)}
+            onChange={(e) => onTagInputChange(e.target.value)}
             onKeyDown={onTagInputKeyDown}
             onBlur={onTagInputBlur}
             className="flex-1 min-w-64 placeholder:text-muted-foreground border-none bg-transparent px-1 py-1 text-sm outline-none"
