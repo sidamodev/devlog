@@ -8,7 +8,7 @@ export default function PostProgressBar() {
   return (
     <div className="fixed top-16 left-0 z-10 w-full h-px">
       <div
-        className="h-full bg-cyan-500 dark:bg-cyan-400 transition-all duration-150 ease-out"
+        className="h-full bg-cyan-500 motion-reduce:transition-none dark:bg-cyan-400"
         style={{ width: `${progress}%` }}
       />
     </div>
