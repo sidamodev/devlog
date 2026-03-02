@@ -82,8 +82,8 @@ async function main() {
     const user = await prisma.user.create({
       data: {
         username: item.author.username,
-        nickname: item.author.nickname,
-        avatar: item.author.avatar,
+        name: item.author.name,
+        image: item.author.image,
       },
     });
 

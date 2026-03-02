@@ -1,8 +1,8 @@
 type PostFixtureAuthor = {
   id: number;
   username: string;
-  nickname: string;
-  avatar?: string;
+  name: string;
+  image?: string;
 };
 
 type PostFixtureBase = {
@@ -34,8 +34,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 12,
       username: 'kimdev',
-      nickname: 'Kim Dev',
-      avatar: 'https://i.pravatar.cc/96?img=12',
+      name: 'Kim Dev',
+      image: 'https://i.pravatar.cc/96?img=12',
     },
     createdAt: '2025-12-24',
     thumbnail: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80',
@@ -53,8 +53,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 32,
       username: 'frontendlee',
-      nickname: 'Frontend Lee',
-      avatar: 'https://i.pravatar.cc/96?img=32',
+      name: 'Frontend Lee',
+      image: 'https://i.pravatar.cc/96?img=32',
     },
     createdAt: '2025-12-20',
     thumbnail: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&q=80',
@@ -72,8 +72,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 47,
       username: 'jiyoonpark',
-      nickname: 'Jiyoon Park',
-      avatar: 'https://i.pravatar.cc/96?img=47',
+      name: 'Jiyoon Park',
+      image: 'https://i.pravatar.cc/96?img=47',
     },
     createdAt: '2025-12-18',
     thumbnail: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80',
@@ -91,8 +91,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 8,
       username: 'minsuchoi',
-      nickname: 'Minsu Choi',
-      avatar: 'https://i.pravatar.cc/96?img=8',
+      name: 'Minsu Choi',
+      image: 'https://i.pravatar.cc/96?img=8',
     },
     createdAt: '2025-12-15',
     thumbnail: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=600&q=80',
@@ -105,13 +105,13 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
   {
     id: 5,
     title: 'shadcn/ui Avatar 컴포넌트 커스터마이징 팁',
-    slug: 'shadcnui-avatar-컴포넌트-커스터마이징-팁',
+    slug: 'shadcnui-image-컴포넌트-커스터마이징-팁',
     authorId: 15,
     author: {
       id: 15,
       username: 'devpark',
-      nickname: 'Dev Park',
-      avatar: 'https://i.pravatar.cc/96?img=15',
+      name: 'Dev Park',
+      image: 'https://i.pravatar.cc/96?img=15',
     },
     createdAt: '2025-12-10',
     thumbnail: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=600&q=80',
@@ -129,8 +129,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 22,
       username: 'sorakim',
-      nickname: 'Sora Kim',
-      avatar: 'https://i.pravatar.cc/96?img=22',
+      name: 'Sora Kim',
+      image: 'https://i.pravatar.cc/96?img=22',
     },
     createdAt: '2025-12-08',
     thumbnail: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80',
@@ -148,8 +148,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 5,
       username: 'hoonjeong',
-      nickname: 'Hoon Jeong',
-      avatar: 'https://i.pravatar.cc/96?img=5',
+      name: 'Hoon Jeong',
+      image: 'https://i.pravatar.cc/96?img=5',
     },
     createdAt: '2025-12-06',
     thumbnail: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1000&auto=format&fit=crop&q=60',
@@ -167,8 +167,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 41,
       username: 'eunjihan',
-      nickname: 'Eunji Han',
-      avatar: 'https://i.pravatar.cc/96?img=41',
+      name: 'Eunji Han',
+      image: 'https://i.pravatar.cc/96?img=41',
     },
     createdAt: '2025-12-04',
     thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
@@ -186,8 +186,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 18,
       username: 'taehyunlim',
-      nickname: 'Taehyun Lim',
-      avatar: 'https://i.pravatar.cc/96?img=18',
+      name: 'Taehyun Lim',
+      image: 'https://i.pravatar.cc/96?img=18',
     },
     createdAt: '2025-12-02',
     thumbnail: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=600&q=80',
@@ -205,8 +205,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 29,
       username: 'hyunwooseo',
-      nickname: 'Hyunwoo Seo',
-      avatar: 'https://i.pravatar.cc/96?img=29',
+      name: 'Hyunwoo Seo',
+      image: 'https://i.pravatar.cc/96?img=29',
     },
     createdAt: '2025-11-30',
     thumbnail: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=600&q=80',
@@ -223,8 +223,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 52,
       username: 'jisookang',
-      nickname: 'Jisoo Kang',
-      avatar: 'https://i.pravatar.cc/96?img=52',
+      name: 'Jisoo Kang',
+      image: 'https://i.pravatar.cc/96?img=52',
     },
     createdAt: '2025-11-28',
     thumbnail: 'https://images.unsplash.com/photo-1556155092-8707de31f9c4?auto=format&fit=crop&w=600&q=80',
@@ -242,8 +242,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 9,
       username: 'devshin',
-      nickname: 'Dev Shin',
-      avatar: 'https://i.pravatar.cc/96?img=9',
+      name: 'Dev Shin',
+      image: 'https://i.pravatar.cc/96?img=9',
     },
     createdAt: '2025-11-26',
     thumbnail: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=600&q=80',
@@ -261,8 +261,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 36,
       username: 'hanayoo',
-      nickname: 'Hana Yoo',
-      avatar: 'https://i.pravatar.cc/96?img=36',
+      name: 'Hana Yoo',
+      image: 'https://i.pravatar.cc/96?img=36',
     },
     createdAt: '2025-11-24',
     thumbnail: 'https://images.unsplash.com/photo-1556075798-4825dfaaf498?auto=format&fit=crop&w=600&q=80',
@@ -280,8 +280,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 25,
       username: 'minjaelee',
-      nickname: 'Minjae Lee',
-      avatar: 'https://i.pravatar.cc/96?img=25',
+      name: 'Minjae Lee',
+      image: 'https://i.pravatar.cc/96?img=25',
     },
     createdAt: '2025-11-22',
     thumbnail: 'https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=600&q=80',
@@ -298,8 +298,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 44,
       username: 'yerincho',
-      nickname: 'Yerin Cho',
-      avatar: 'https://i.pravatar.cc/96?img=44',
+      name: 'Yerin Cho',
+      image: 'https://i.pravatar.cc/96?img=44',
     },
     createdAt: '2025-11-20',
     thumbnail: 'https://images.unsplash.com/photo-1528498033373-3c6c08e93d79?auto=format&fit=crop&w=600&q=80',
@@ -317,8 +317,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 6,
       username: 'donghyunkim',
-      nickname: 'Donghyun Kim',
-      avatar: 'https://i.pravatar.cc/96?img=6',
+      name: 'Donghyun Kim',
+      image: 'https://i.pravatar.cc/96?img=6',
     },
     createdAt: '2025-11-18',
     thumbnail: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80',
@@ -335,8 +335,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 20,
       username: 'sejinpark',
-      nickname: 'Sejin Park',
-      avatar: 'https://i.pravatar.cc/96?img=20',
+      name: 'Sejin Park',
+      image: 'https://i.pravatar.cc/96?img=20',
     },
     createdAt: '2025-11-16',
     thumbnail: 'https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?auto=format&fit=crop&w=600&q=80',
@@ -353,8 +353,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 54,
       username: 'narijung',
-      nickname: 'Nari Jung',
-      avatar: 'https://i.pravatar.cc/96?img=54',
+      name: 'Nari Jung',
+      image: 'https://i.pravatar.cc/96?img=54',
     },
     createdAt: '2025-11-14',
     thumbnail: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=600&q=80',
@@ -372,8 +372,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 13,
       username: 'aramkim',
-      nickname: 'Aram Kim',
-      avatar: 'https://i.pravatar.cc/96?img=13',
+      name: 'Aram Kim',
+      image: 'https://i.pravatar.cc/96?img=13',
     },
     createdAt: '2025-11-12',
     thumbnail: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80',
@@ -391,8 +391,8 @@ const BASE_POST_LIST_FIXTURE: Readonly<PostFixtureBase[]> = [
     author: {
       id: 39,
       username: 'yonghopark',
-      nickname: 'Yongho Park',
-      avatar: 'https://i.pravatar.cc/96?img=39',
+      name: 'Yongho Park',
+      image: 'https://i.pravatar.cc/96?img=39',
     },
     createdAt: '2025-11-10',
     thumbnail: 'https://images.unsplash.com/photo-1556075798-4825dfaaf498?auto=format&fit=crop&w=600&q=80',

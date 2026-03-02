@@ -18,7 +18,7 @@ export const mapPostDtoToSummary = (response: PostListApiResponse): PostListResp
         ...post,
         author: {
           ...post.author,
-          avatar: post.author.avatar ?? undefined,
+          image: post.author.image ?? undefined,
         },
       }),
     ),

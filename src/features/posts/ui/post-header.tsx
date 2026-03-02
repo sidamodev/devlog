@@ -46,12 +46,12 @@ const PostHeader = ({
       {/* Author Info */}
       <div className="flex items-center gap-2 pt-6 border-t border-border">
         <Avatar className="h-10 w-10">
-          <AvatarImage src={author.avatar} alt={author.nickname} />
-          <AvatarFallback className="font-sans text-sm">{author.nickname.charAt(0)}</AvatarFallback>
+          <AvatarImage src={author.image} alt={author.name} />
+          <AvatarFallback className="font-sans text-sm">{author.name.charAt(0)}</AvatarFallback>
         </Avatar>
 
         <div className="flex flex-col">
-          <span className="font-sans font-medium text-foreground text-sm">{author.nickname}</span>
+          <span className="font-sans font-medium text-foreground text-sm">{author.name}</span>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <time dateTime={createdAt}>{formatDate(createdAt)}</time>
             <span>·</span>

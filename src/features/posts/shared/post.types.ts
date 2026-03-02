@@ -4,8 +4,8 @@ import type { PaginatedResponse } from '@/types/pagination';
 export type Author = {
   id: number;
   username: string;
-  nickname: string;
-  avatar?: string;
+  name: string;
+  image?: string;
 };
 
 export type PostSummary = {

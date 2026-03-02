@@ -4,8 +4,8 @@ import type { CreatePostFieldErrors } from '@/features/posts/shared/create-post.
 export type AuthorDto = {
   id: number;
   username: string;
-  nickname: string;
-  avatar: string | null;
+  name: string;
+  image: string | null;
 };
 
 export type PostSummaryDto = {
@@ -45,8 +45,8 @@ export type CreatePostSuccess = {
     author: {
       id: number;
       username: string;
-      nickname: string;
-      avatar: string | null;
+      name: string;
+      image: string | null;
     };
   };
 };

@@ -13,10 +13,10 @@ const PostListItem = ({ post }: { post: PostSummary }) => {
       <header className="flex items-center gap-2 text-sm mb-2">
         <Link href={`/@${post.author.username}`} className="flex items-center gap-1 hover:underline">
           <Avatar className="size-5 sm:size-6">
-            <AvatarImage src={post.author.avatar} />
-            <AvatarFallback>{post.author.nickname.charAt(0)}</AvatarFallback>
+            <AvatarImage src={post.author.image} />
+            <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
           </Avatar>
-          <span className="font-medium tracking-tight text-foreground">{post.author.nickname}</span>
+          <span className="font-medium tracking-tight text-foreground">{post.author.name}</span>
         </Link>
         <span className="text-muted-foreground">·</span>
         <time className="text-xs text-muted-foreground">{formatDate(post.createdAt)}</time>
