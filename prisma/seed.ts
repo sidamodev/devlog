@@ -108,6 +108,7 @@ async function main() {
         title: item.title,
         thumbnail: item.thumbnail,
         description: item.description,
+        isGeneratedDescription: false,
         body: detail.body,
         readingTime: item.readingTime,
         likeCount: item.likeCount,
