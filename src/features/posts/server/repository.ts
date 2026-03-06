@@ -56,6 +56,7 @@ export const findOrCreateDefaultAuthor = async () => {
 
   return prisma.user.create({
     data: {
+      id: 'default-writer-id',
       username: 'writer',
       name: 'Writer',
       image: null,
@@ -65,7 +66,7 @@ export const findOrCreateDefaultAuthor = async () => {
 };
 
 type CreatePostRecordInput = {
-  authorId: number;
+  authorId: string;
   slug: string;
   title: string;
   description: string;

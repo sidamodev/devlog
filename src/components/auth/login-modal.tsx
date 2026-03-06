@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { signIn } from 'next-auth/react';
+import { signIn } from '@/lib/auth-client';
 import { useState } from 'react';
 import { FaGithub, FaGoogle } from 'react-icons/fa';
 
@@ -47,7 +47,7 @@ export function LoginModal() {
             variant="outline"
             className="h-12 w-full rounded-xl text-[15px] font-medium shadow-sm transition-all duration-300 hover:bg-muted hover:shadow-md active:scale-[0.98]"
             onClick={() => {
-              void signIn('github');
+              void signIn.social({ provider: 'github' });
             }}
           >
             <FaGithub className="mr-3 h-5 w-5" />
@@ -57,7 +57,7 @@ export function LoginModal() {
             variant="outline"
             className="h-12 w-full rounded-xl text-[15px] font-medium shadow-sm transition-all duration-300 hover:bg-muted hover:shadow-md active:scale-[0.98]"
             onClick={() => {
-              void signIn('google');
+              void signIn.social({ provider: 'google' });
             }}
           >
             <FaGoogle className="mr-3 h-5 w-5 text-muted-foreground" />

@@ -1,5 +1,5 @@
 type PostFixtureAuthor = {
-  id: number;
+  id: string | number;
   username: string;
   name: string;
   image?: string;
@@ -9,7 +9,7 @@ type PostFixtureBase = {
   id: number;
   title: string;
   slug: string;
-  authorId: number;
+  authorId: string | number;
   author: PostFixtureAuthor;
   createdAt: string;
   thumbnail: string;
