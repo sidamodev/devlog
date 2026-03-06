@@ -1,4 +1,6 @@
 'use client';
+
+import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { LuMoon, LuSun } from 'react-icons/lu';
@@ -15,20 +17,15 @@ const ThemeSwitcher = () => {
   if (!mounted) return null;
 
   return (
-    <label className="h-6 w-12 relative cursor-pointer transition ease-in-out duration-500">
-      <input
-        type="checkbox"
-        className="peer sr-only"
-        id="theme-switch"
-        checked={resolvedTheme === 'dark'}
-        onChange={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-      />
-      <span className="absolute flex justify-between items-center inset-0 px-1 z-1" aria-hidden="true">
-        <LuSun size={16} />
-        <LuMoon size={16} />
-      </span>
-      <span className="after:duration-500 absolute inset-0 rounded-full bg-sidebar-border after:content-[''] after:absolute after:top-1 after:left-1 after:h-4 after:w-4 after:rounded-full after:bg-foreground after:transition-transform peer-checked:after:translate-x-6 after:z-1" />
-    </label>
+    <Button
+      variant="ghost"
+      size="icon"
+      className="h-8 w-8 rounded-full text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-all"
+      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+      aria-label="Toggle theme"
+    >
+      {resolvedTheme === 'dark' ? <LuMoon className="size-4" /> : <LuSun className="size-4" />}
+    </Button>
   );
 };
 export default ThemeSwitcher;

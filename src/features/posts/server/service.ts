@@ -85,7 +85,12 @@ export const getPostListResponse = async (rawCursor?: string): Promise<PostListA
     title: post.title,
     slug: toUrlSlug(post.slug, post.id),
     authorId: post.authorId,
-    author: post.author,
+    author: {
+      id: post.author.id,
+      username: post.author.username ?? '',
+      name: post.author.name ?? '',
+      image: post.author.image,
+    },
     createdAt: post.createdAt.toISOString(),
     updatedAt: post.updatedAt.toISOString(),
     thumbnail: post.thumbnail,
@@ -126,7 +131,12 @@ export const getPostDetail = async (slug: string): Promise<PostDetail | null> =>
 
   return {
     ...post,
-    author: { ...post.author, avatar: post.author.avatar ?? undefined },
+    author: { 
+      id: post.author.id,
+      username: post.author.username ?? '',
+      name: post.author.name ?? '',
+      image: post.author.image ?? undefined,
+    },
     createdAt: post.createdAt.toISOString(),
     updatedAt: post.updatedAt.toISOString(),
     body: post.body as Block[],
@@ -178,9 +188,9 @@ export const createPost = async (input: unknown): Promise<CreatePostResult> => {
         createdAt: created.createdAt.toISOString(),
         author: {
           id: created.author.id,
-          username: created.author.username,
-          nickname: created.author.nickname,
-          avatar: created.author.avatar,
+          username: created.author.username ?? '',
+          name: created.author.name ?? '',
+          image: created.author.image,
         },
       },
     };

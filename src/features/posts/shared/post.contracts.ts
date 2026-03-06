@@ -2,17 +2,17 @@ import type { PaginatedResponse } from '@/types/pagination';
 import type { CreatePostFieldErrors } from '@/features/posts/shared/create-post.rules';
 
 export type AuthorDto = {
-  id: number;
+  id: string;
   username: string;
-  nickname: string;
-  avatar: string | null;
+  name: string;
+  image: string | null;
 };
 
 export type PostSummaryDto = {
   id: number;
   title: string;
   slug: string;
-  authorId: number;
+  authorId: string;
   author: AuthorDto;
   createdAt: string;
   updatedAt: string;
@@ -43,10 +43,10 @@ export type CreatePostSuccess = {
     title: string;
     createdAt: string;
     author: {
-      id: number;
+      id: string;
       username: string;
-      nickname: string;
-      avatar: string | null;
+      name: string;
+      image: string | null;
     };
   };
 };

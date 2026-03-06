@@ -2,17 +2,17 @@ import type { Block } from '@blocknote/core';
 import type { PaginatedResponse } from '@/types/pagination';
 
 export type Author = {
-  id: number;
+  id: string;
   username: string;
-  nickname: string;
-  avatar?: string;
+  name: string;
+  image?: string;
 };
 
 export type PostSummary = {
   id: number;
   title: string;
   slug: string;
-  authorId: number;
+  authorId: string;
   author: Author;
   createdAt: string;
   updatedAt: string;

@@ -2,6 +2,7 @@ services:
   postgres:
     image: postgres:17-alpine3.23
     container_name: local-test-postgres
+    restart: always
     env_file:
       - .env
     environment:

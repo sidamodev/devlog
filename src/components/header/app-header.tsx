@@ -1,23 +1,22 @@
+import { LoginModal } from '@/components/auth/login-modal';
+import { UserDropdown } from '@/components/auth/user-dropdown';
 import LogoButton from '@/components/navigation/logo-button';
 import ThemeSwitcher from '@/components/theme-switcher/theme-switcher';
-import { Kbd } from '@/components/ui/kbd';
-import { LuSearch } from 'react-icons/lu';
+import { auth } from '@/auth';
+import { headers } from 'next/headers';
 
-const AppHeader = () => {
+const AppHeader = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
+
   return (
-    <header className="sticky top-0 z-10 flex h-16 w-full items-center justify-between px-4 backdrop-blur-xl">
-      <LogoButton className='sm:ml-2' />
+    <header className="sticky top-0 z-10 flex h-16 w-full items-center justify-between px-4 backdrop-blur-xl border-b border-border/40">
+      <LogoButton className="sm:ml-2" />
 
-      <div className="flex items-center gap-2">
-        <button className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground bg-muted/50 hover:bg-muted border rounded-md transition-colors w-64 justify-between">
-          <div className="flex items-center gap-2">
-            <LuSearch className="w-4 h-4" />
-            <span>검색...</span>
-          </div>
-          <Kbd>Ctrl + K</Kbd>
-        </button>
-
+      <div className="flex items-center gap-2 sm:gap-4 pr-2">
         <ThemeSwitcher />
+        {session?.user ? <UserDropdown /> : <LoginModal />}
       </div>
     </header>
   );

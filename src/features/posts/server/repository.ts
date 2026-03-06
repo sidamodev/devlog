@@ -8,8 +8,8 @@ const authorInclude = {
     select: {
       id: true,
       username: true,
-      nickname: true,
-      avatar: true,
+      name: true,
+      image: true,
     },
   },
 } as const;
@@ -47,7 +47,7 @@ export const findPostById = async (id: number) => {
 export const findOrCreateDefaultAuthor = async () => {
   const existingAuthor = await prisma.user.findFirst({
     orderBy: { id: 'asc' },
-    select: { id: true, username: true, nickname: true, avatar: true },
+    select: { id: true, username: true, name: true, image: true },
   });
 
   if (existingAuthor) {
@@ -56,16 +56,17 @@ export const findOrCreateDefaultAuthor = async () => {
 
   return prisma.user.create({
     data: {
+      id: 'default-writer-id',
       username: 'writer',
-      nickname: 'Writer',
-      avatar: null,
+      name: 'Writer',
+      image: null,
     },
-    select: { id: true, username: true, nickname: true, avatar: true },
+    select: { id: true, username: true, name: true, image: true },
   });
 };
 
 type CreatePostRecordInput = {
-  authorId: number;
+  authorId: string;
   slug: string;
   title: string;
   description: string;

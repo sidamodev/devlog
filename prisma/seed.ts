@@ -72,7 +72,7 @@ async function main() {
     prisma.user.deleteMany(),
   ]);
 
-  const userIdByUsername = new Map<string, number>();
+  const userIdByUsername = new Map<string, string>();
 
   for (const item of postsToSeed) {
     if (userIdByUsername.has(item.author.username)) {
@@ -81,9 +81,10 @@ async function main() {
 
     const user = await prisma.user.create({
       data: {
+        id: String(item.author.id),
         username: item.author.username,
-        nickname: item.author.nickname,
-        avatar: item.author.avatar,
+        name: item.author.name,
+        image: item.author.image,
       },
     });
 
@@ -108,6 +109,7 @@ async function main() {
         title: item.title,
         thumbnail: item.thumbnail,
         description: item.description,
+        isGeneratedDescription: false,
         body: detail.body,
         readingTime: item.readingTime,
         likeCount: item.likeCount,

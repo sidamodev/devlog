@@ -1,5 +1,5 @@
-export const TITLE_MAX_LENGTH = 120;
-export const DESCRIPTION_MAX_LENGTH = 160;
+export const TITLE_MAX_LENGTH = 100;
+export const DESCRIPTION_MAX_LENGTH = 140;
 export const TAG_MAX_COUNT = 10;
 export const TAG_MAX_LENGTH = 20;
 
