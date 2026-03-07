@@ -11,15 +11,27 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { signOut, useSession } from '@/lib/auth-client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { LuLogOut, LuUser } from 'react-icons/lu';
 
 export function UserDropdown() {
   const { data: session } = useSession();
+  const router = useRouter();
 
   if (!session?.user) return null;
 
   const { name, email, image } = session.user;
   const initials = name?.substring(0, 2).toUpperCase() ?? email?.substring(0, 2).toUpperCase() ?? 'U';
+
+  const handleSignOut = async () => {
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.refresh();
+        },
+      },
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -45,7 +57,7 @@ export function UserDropdown() {
         </DropdownMenuItem>
         <DropdownMenuItem
           className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
-          onClick={() => void signOut()}
+          onClick={handleSignOut}
         >
           <LuLogOut className="mr-2 size-4" />
           <span>로그아웃</span>
