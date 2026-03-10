@@ -47,7 +47,7 @@ export function LoginModal() {
             variant="outline"
             className="h-12 w-full rounded-xl text-[15px] font-medium shadow-sm transition-all duration-300 hover:bg-muted hover:shadow-md active:scale-[0.98]"
             onClick={() => {
-              void signIn.social({ provider: 'github' });
+              void signIn.social({ provider: 'github', callbackURL: '/onboarding/username' });
             }}
           >
             <FaGithub className="mr-3 h-5 w-5" />
@@ -57,7 +57,7 @@ export function LoginModal() {
             variant="outline"
             className="h-12 w-full rounded-xl text-[15px] font-medium shadow-sm transition-all duration-300 hover:bg-muted hover:shadow-md active:scale-[0.98]"
             onClick={() => {
-              void signIn.social({ provider: 'google' });
+              void signIn.social({ provider: 'google', callbackURL: '/onboarding/username' });
             }}
           >
             <FaGoogle className="mr-3 h-5 w-5 text-muted-foreground" />

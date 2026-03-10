@@ -309,6 +309,13 @@ export const usePostWriteForm = (options: UsePostWriteFormOptions = {}) => {
       });
 
       if (!result.ok) {
+        if (result.error.code === 'USERNAME_REQUIRED') {
+          toast.error(result.error.message);
+          router.push('/onboarding/username');
+          dispatch({ type: 'SUBMIT_ENDED' });
+          return;
+        }
+
         const errorFieldMap = result.error.fieldErrors ?? {};
         dispatch({ type: 'SET_ERRORS', errors: errorFieldMap });
 

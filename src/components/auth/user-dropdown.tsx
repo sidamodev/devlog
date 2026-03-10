@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { LuLogOut, LuUser } from 'react-icons/lu';
 
-export function UserDropdown() {
+export function UserDropdown({ profileHref }: { profileHref: string }) {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -50,7 +50,7 @@ export function UserDropdown() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" asChild>
-          <Link href="/profile/user">
+          <Link href={profileHref}>
             <LuUser className="mr-2 size-4" />
             <span>프로필</span>
           </Link>

@@ -33,7 +33,7 @@ export type CreatePostInput = {
 };
 
 export type CreatePostErrors = CreatePostFieldErrors;
-export type CreatePostErrorCode = 'VALIDATION_ERROR' | 'INTERNAL_ERROR';
+export type CreatePostErrorCode = 'VALIDATION_ERROR' | 'UNAUTHORIZED' | 'USERNAME_REQUIRED' | 'INTERNAL_ERROR';
 
 export type CreatePostSuccess = {
   ok: true;

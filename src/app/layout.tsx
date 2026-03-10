@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   description: 'Blog by sdiamodev',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

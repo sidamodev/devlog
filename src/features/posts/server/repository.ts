@@ -44,27 +44,6 @@ export const findPostById = async (id: number) => {
   });
 };
 
-export const findOrCreateDefaultAuthor = async () => {
-  const existingAuthor = await prisma.user.findFirst({
-    orderBy: { id: 'asc' },
-    select: { id: true, username: true, name: true, image: true },
-  });
-
-  if (existingAuthor) {
-    return existingAuthor;
-  }
-
-  return prisma.user.create({
-    data: {
-      id: 'default-writer-id',
-      username: 'writer',
-      name: 'Writer',
-      image: null,
-    },
-    select: { id: true, username: true, name: true, image: true },
-  });
-};
-
 type CreatePostRecordInput = {
   authorId: string;
   slug: string;

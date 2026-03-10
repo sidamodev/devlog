@@ -13,7 +13,7 @@ import type { CreatePostResult, PostListApiResponse, PostSummaryDto } from '@/fe
 import type { PostDetail } from '@/features/posts/shared/post.types';
 import { hashids } from '@/lib/hashid';
 import { toPrismaInputJson } from '@/lib/prisma-json';
-import { createPostRecord, findOrCreateDefaultAuthor, findPostById, findPostList } from './repository';
+import { createPostRecord, findPostById, findPostList } from './repository';
 
 const PAGE_SIZE = 10;
 
@@ -150,7 +150,7 @@ export const getPostDetail = async (slug: string): Promise<PostDetail | null> =>
  * @param input - 클라이언트/액션 계층에서 전달된 게시글 생성 원본 입력값
  * @returns 생성 성공 시 게시글 메타 정보, 실패 시 에러 코드/메시지를 포함한 결과
  */
-export const createPost = async (input: unknown): Promise<CreatePostResult> => {
+export const createPost = async (input: unknown, authorId: string): Promise<CreatePostResult> => {
   try {
     const validated = validateCreatePostInput(input);
     if (!validated.success) {
@@ -167,10 +167,9 @@ export const createPost = async (input: unknown): Promise<CreatePostResult> => {
     const { title, body, description: userDescription } = validated.data;
     const isGeneratedDescription = !userDescription;
     const description = userDescription ?? buildPostDescriptionFromBlocks(body, DESCRIPTION_MAX_LENGTH);
-    const author = await findOrCreateDefaultAuthor();
     const plainText = collectTextFromBlocks(body);
     const created = await createPostRecord({
-      authorId: author.id,
+      authorId,
       slug: toBaseSlug(title),
       title,
       description,

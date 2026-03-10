@@ -4,6 +4,8 @@ export const TAG_MAX_COUNT = 10;
 export const TAG_MAX_LENGTH = 20;
 
 export const CREATE_POST_MESSAGES = {
+  authRequired: '로그인 후 게시글을 작성할 수 있습니다.',
+  usernameRequired: '게시글을 작성하려면 먼저 아이디를 설정해주세요.',
   invalidInput: '입력값을 확인해주세요.',
   internalError: '게시글 등록 중 오류가 발생했습니다.',
   titleRequired: '제목은 필수 입력값입니다.',
