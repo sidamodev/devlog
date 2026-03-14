@@ -9,9 +9,8 @@ const AppHeader = async () => {
   const profileHref = currentUser?.username ? `/@${currentUser.username}` : '/onboarding/username';
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 w-full items-center justify-between px-4 backdrop-blur-xl border-b border-border/40">
+    <header className="fixed top-0 z-10 flex h-16 w-full items-center justify-between px-4 backdrop-blur-xl border-b border-border/40">
       <LogoButton className="sm:ml-2" />
-
       <div className="flex items-center gap-2 sm:gap-4 pr-2">
         <ThemeSwitcher />
         {currentUser ? <UserDropdown profileHref={profileHref} /> : <LoginModal />}

@@ -38,7 +38,7 @@ export default async function RootLayout({
           <div className="min-h-screen">
             <AppHeader />
             <AppNav />
-            <div className="min-w-0 pb-[calc(3.5rem+env(safe-area-inset-bottom))] sm:pb-0">
+            <div className="min-w-0 mt-16 pb-[calc(3.5rem+env(safe-area-inset-bottom))] sm:pb-0">
               <main className="flex justify-center p-4 sm:ml-20">{children}</main>
             </div>
           </div>
